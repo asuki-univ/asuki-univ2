@@ -1,11 +1,12 @@
 package ai;
 
+import player.Player;
 import board.Board;
 import board.Position;
 import board.Stone;
 import board.Turn;
 
-public class NegaMaxSimpleAI implements AI {
+public class NegaMaxSimpleAI implements Player {
     private static final int[][] EVAL_VALUES = {
         { 100, -50, 35, 30, 30, 35, -50, 100 },
         { -50, -70, 10, 15, 15, 10, -70, -50 },
@@ -24,11 +25,12 @@ public class NegaMaxSimpleAI implements AI {
         this.turn = turn;
     }
     
-    public EvalResult eval(Board board) {
-        return evalInternal(board, MAX_DEPTH, turn.stone(), 0);
+    @Override
+    public Position play(Board board) {
+        return eval(board, MAX_DEPTH, turn.stone(), 0).getPosition();
     }
-    
-    private EvalResult evalInternal(Board board, int restDepth, Stone stone, int scoreSum) {
+
+    private EvalResult eval(Board board, int restDepth, Stone stone, int scoreSum) {
         if (restDepth == 0)
             return new EvalResult(-scoreSum, null);
         
@@ -42,7 +44,7 @@ public class NegaMaxSimpleAI implements AI {
                     didPlayed = true;
                     Board b = new Board(board);
                     b.put(x, y, stone);
-                    int score = -evalInternal(b, restDepth - 1, stone.flip(), scoreSum + (stone == turn.stone() ? EVAL_VALUES[y-1][x-1] : -EVAL_VALUES[y-1][x-1])).getScore();
+                    int score = -eval(b, restDepth - 1, stone.flip(), scoreSum + (stone == turn.stone() ? EVAL_VALUES[y-1][x-1] : -EVAL_VALUES[y-1][x-1])).getScore();
                     if (maxScore < score) {
                         maxScore = score;
                         p = new Position(x, y);
@@ -56,7 +58,7 @@ public class NegaMaxSimpleAI implements AI {
             return new EvalResult(maxScore, p);
         } else {
             // 自分の番がパスだった場合は、-100 点しておく。
-            int score = -evalInternal(board, restDepth - 1, stone.flip(), scoreSum).getScore();
+            int score = -eval(board, restDepth - 1, stone.flip(), scoreSum).getScore();
             return new EvalResult(score, null);
         }
     }

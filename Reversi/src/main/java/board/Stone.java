@@ -14,7 +14,7 @@ public enum Stone {
 
     public Stone flip() {
         assert(false);
-        return null;
+        throw new RuntimeException("Should not happen");
     }
 }
 

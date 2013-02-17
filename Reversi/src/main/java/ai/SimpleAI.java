@@ -1,10 +1,11 @@
 package ai;
 
+import player.Player;
 import board.Board;
 import board.Position;
 import board.Turn;
 
-public class SimpleAI implements AI {
+public class SimpleAI implements Player {
     private static final int[][] EVAL_VALUES = {
         { 100, -50, 35, 30, 30, 35, -50, 100 },
         { -50, -70, 10, 15, 15, 10, -70, -50 },
@@ -23,7 +24,11 @@ public class SimpleAI implements AI {
     }
     
     @Override
-    public EvalResult eval(Board board) {
+    public Position play(Board board) {
+        return eval(board).getPosition();
+    }
+    
+    private EvalResult eval(Board board) {
         Position p = null;
         int maxValue = -200;
 

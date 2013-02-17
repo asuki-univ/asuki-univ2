@@ -5,6 +5,8 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+import player.Player;
+
 import board.Board;
 import board.Position;
 import board.Turn;
@@ -23,10 +25,9 @@ public class SimpleAITest {
                 "........" + 
                 "........");
         
-        AI ai = new SimpleAI(Turn.BLACK);
-        EvalResult r = ai.eval(board);
+        Player ai = new SimpleAI(Turn.BLACK);
+        Position p = ai.play(board);
         
-        assertThat(r.getPosition(), equalTo(new Position(4, 3)));
-        
+        assertThat(p, equalTo(new Position(4, 3)));
     }
 }

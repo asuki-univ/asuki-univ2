@@ -1,8 +1,6 @@
-import player.AIPlayer;
 import player.Player;
-import ai.MinMaxSimpleAI;
 import ai.AlphaBetaSimpleAI;
-import ai.NegaMaxSimpleAI;
+import ai.MinMaxSimpleAI;
 import ai.SimpleAI;
 import board.Board;
 import board.Position;
@@ -17,14 +15,18 @@ public class Main {
         boolean hasPassed = false;
 
         //Player blackPlayer = new HumanPlayer(Turn.BLACK);
-        Player blackPlayer = new AIPlayer(new SimpleAI(Turn.BLACK));
-        //Player whitePlayer = new AIPlayer(new SimpleAI(Turn.WHITE));
-        //Player whitePlayer = new AIPlayer(new MinMaxSimpleAI(Turn.WHITE));
-        //Player whitePlayer = new AIPlayer(new NegaMaxSimpleAI(Turn.WHITE));
-        Player whitePlayer = new AIPlayer(new AlphaBetaSimpleAI(Turn.WHITE));
+        //Player blackPlayer = new SimpleAI(Turn.BLACK);
+        Player blackPlayer = new MinMaxSimpleAI(Turn.BLACK);
+        Player whitePlayer = new SimpleAI(Turn.WHITE);
+        //Player whitePlayer = new MinMaxSimpleAI(Turn.WHITE);
+        //Player whitePlayer = new NegaMaxSimpleAI(Turn.WHITE);
+        // Player whitePlayer = new AlphaBetaSimpleAI(Turn.WHITE);
         
         while (true) {
-            System.out.println(board.toString());
+            // 盤を見やすいように表示
+            board.show();
+            
+            // どこかに置けないならばパスをしなければならない。
             if (!board.isPuttableSomewhere(turn.stone())) {
                 if (hasPassed) // ２連続パスすると終了
                     break;

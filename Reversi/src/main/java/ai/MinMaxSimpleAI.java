@@ -1,11 +1,12 @@
 package ai;
 
+import player.Player;
 import board.Board;
 import board.Position;
 import board.Stone;
 import board.Turn;
 
-public class MinMaxSimpleAI implements AI {
+public class MinMaxSimpleAI implements Player {
     private static final int[][] EVAL_VALUES = {
         { 100, -50, 35, 30, 30, 35, -50, 100 },
         { -50, -70, 10, 15, 15, 10, -70, -50 },
@@ -24,8 +25,9 @@ public class MinMaxSimpleAI implements AI {
         this.turn = turn;
     }
     
-    public EvalResult eval(Board board) {
-        return evalMyTurn(board, MAX_DEPTH, turn.stone(), 0);
+    @Override
+    public Position play(Board board) {
+        return evalMyTurn(board, MAX_DEPTH, turn.stone(), 0).getPosition();
     }
     
     private EvalResult evalMyTurn(Board board, int restDepth, Stone stone, int scoreSum) {
@@ -91,6 +93,4 @@ public class MinMaxSimpleAI implements AI {
             return new EvalResult(score, null);
         }        
     }
-    
-
 }

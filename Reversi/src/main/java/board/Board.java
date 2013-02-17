@@ -5,8 +5,8 @@ public class Board {
     public static final int HEIGHT = 8;
     public static final int MAP_WIDTH = 10;
     public static final int MAP_HEIGHT = 10;
-    private static final int[] dx = new int[]{  0 , 1, 1, 1, 0, -1, -1, -1 };
-    private static final int[] dy = new int[]{ -1, -1, 0, 1, 1,  1,  0, -1 };
+    private static final int[] DX = new int[]{  0 , 1, 1, 1, 0, -1, -1, -1 };
+    private static final int[] DY = new int[]{ -1, -1, 0, 1, 1,  1,  0, -1 };
 
     private Stone[][] board = new Stone[MAP_HEIGHT][MAP_WIDTH];
 
@@ -68,7 +68,7 @@ public class Board {
             return false;
 
         for (int i = 0; i < 8; ++i) {
-            if (countFlippable(x, y, stone, dx[i], dy[i]) > 0)
+            if (countFlippable(x, y, stone, DX[i], DY[i]) > 0)
                 return true;
         }
 
@@ -80,14 +80,18 @@ public class Board {
 
         board[y][x] = stone;
         for (int i = 0; i < 8; ++i) {
-            int count = countFlippable(x, y, stone, dx[i], dy[i]);
+            int count = countFlippable(x, y, stone, DX[i], DY[i]);
             for (int j = 1; j <= count; ++j) {
-                board[y + dy[i] * j][x + dx[i] * j] = stone;
+                board[y + DY[i] * j][x + DX[i] * j] = stone;
             }
         }
     }
 
     public void setup() {
+        for (int y = 1; y <= HEIGHT; ++y)
+            for (int x = 1; x <= WIDTH; ++x)
+                board[y][x] = Stone.EMPTY;
+        
         board[4][4] = board[5][5] = Stone.WHITE; 
         board[4][5] = board[5][4] = Stone.BLACK; 
     }
@@ -164,5 +168,9 @@ public class Board {
         }
 
         return builder.toString();
+    }
+    
+    public void show() {
+        System.out.println(toString());
     }
 }

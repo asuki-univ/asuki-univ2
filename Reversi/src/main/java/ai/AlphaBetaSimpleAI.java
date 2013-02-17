@@ -1,11 +1,12 @@
 package ai;
 
+import player.Player;
 import board.Board;
 import board.Position;
 import board.Stone;
 import board.Turn;
 
-public class AlphaBetaSimpleAI implements AI {
+public class AlphaBetaSimpleAI implements Player {
     private static final int[][] EVAL_VALUES = {
         { 100, -50, 35, 30, 30, 35, -50, 100 },
         { -50, -70, 10, 15, 15, 10, -70, -50 },
@@ -24,11 +25,12 @@ public class AlphaBetaSimpleAI implements AI {
         this.turn = turn;
     }
     
-    public EvalResult eval(Board board) {
-        return evalInternal(board, MAX_DEPTH, turn.stone(), 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    @Override
+    public Position play(Board board) {
+        return eval(board, MAX_DEPTH, turn.stone(), 0, Integer.MIN_VALUE, Integer.MAX_VALUE).getPosition();
     }
     
-    private EvalResult evalInternal(Board board, int restDepth, Stone stone, int scoreSum, int alpha, int beta) {
+    private EvalResult eval(Board board, int restDepth, Stone stone, int scoreSum, int alpha, int beta) {
         if (restDepth == 0)
             return new EvalResult(-scoreSum, null);
         
@@ -43,7 +45,7 @@ public class AlphaBetaSimpleAI implements AI {
                     Board b = new Board(board);
                     b.put(x, y, stone);
                     int newScoreSum = scoreSum + (stone == turn.stone() ? EVAL_VALUES[y-1][x-1] : -EVAL_VALUES[y-1][x-1]);
-                    int score = -evalInternal(b, restDepth - 1, stone.flip(), newScoreSum, -beta, -Math.max(alpha, maxScore)).getScore();
+                    int score = -eval(b, restDepth - 1, stone.flip(), newScoreSum, -beta, -Math.max(alpha, maxScore)).getScore();
                     if (maxScore < score) {
                         maxScore = score;
                         p = new Position(x, y);
@@ -60,7 +62,7 @@ public class AlphaBetaSimpleAI implements AI {
             assert (p != null);
             return new EvalResult(maxScore, p);
         } else {
-            int score = -evalInternal(board, restDepth - 1, stone.flip(), scoreSum, -beta, -alpha).getScore();
+            int score = -eval(board, restDepth - 1, stone.flip(), scoreSum, -beta, -alpha).getScore();
             return new EvalResult(score, null);
         }
     }
