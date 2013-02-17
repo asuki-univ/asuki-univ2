@@ -1,0 +1,168 @@
+package board;
+
+public class Board {
+    public static final int WIDTH = 8;
+    public static final int HEIGHT = 8;
+    public static final int MAP_WIDTH = 10;
+    public static final int MAP_HEIGHT = 10;
+    private static final int[] dx = new int[]{  0 , 1, 1, 1, 0, -1, -1, -1 };
+    private static final int[] dy = new int[]{ -1, -1, 0, 1, 1,  1,  0, -1 };
+
+    private Stone[][] board = new Stone[MAP_HEIGHT][MAP_WIDTH];
+
+    public Board() {
+        for (int y = 1; y <= HEIGHT; ++y) {
+            for (int x = 1; x <= WIDTH; ++x) {
+                board[y][x] = Stone.EMPTY;
+            }
+        }
+
+        for (int y = 0; y < MAP_HEIGHT; ++y) {
+            board[y][0] = Stone.WALL;
+            board[y][MAP_WIDTH-1] = Stone.WALL;
+        }
+
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            board[0][x] = Stone.WALL;
+            board[MAP_HEIGHT-1][x] = Stone.WALL;
+        }
+    }
+
+    // Copy Constructor
+    public Board(Board board) {
+        for (int y = 0; y < MAP_HEIGHT; ++y)
+            for (int x = 0; x < MAP_WIDTH; ++x)
+                this.board[y][x] = board.board[y][x];
+    }
+    
+    // これは単にめんどくさいので追加しただけ。あとで取る
+    public Board(String str) {
+        this();
+
+        for (int i = 0; i < 64; ++i) {
+            int x = i % 8 + 1;
+            int y = i / 8 + 1;
+
+            if (str.charAt(i) == 'B')
+                board[y][x] = Stone.BLACK;
+            else if (str.charAt(i) == 'W')
+                board[y][x] = Stone.WHITE;
+        }
+    }
+
+    public boolean isPuttableSomewhere(Stone stone) {
+        for (int y = 1; y <= HEIGHT; ++y) {
+            for (int x = 1; x <= WIDTH; ++x) {
+                if (isPuttable(x, y, stone))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isPuttable(int x, int y, Stone stone) {
+        if (x < 1 || WIDTH < x || y < 1 || HEIGHT < y)
+            return false;
+        if (board[y][x] != Stone.EMPTY)
+            return false;
+
+        for (int i = 0; i < 8; ++i) {
+            if (countFlippable(x, y, stone, dx[i], dy[i]) > 0)
+                return true;
+        }
+
+        return false;
+    }
+
+    public void put(int x, int y, Stone stone) {
+        assert(isPuttable(x, y, stone));
+
+        board[y][x] = stone;
+        for (int i = 0; i < 8; ++i) {
+            int count = countFlippable(x, y, stone, dx[i], dy[i]);
+            for (int j = 1; j <= count; ++j) {
+                board[y + dy[i] * j][x + dx[i] * j] = stone;
+            }
+        }
+    }
+
+    public void setup() {
+        board[4][4] = board[5][5] = Stone.WHITE; 
+        board[4][5] = board[5][4] = Stone.BLACK; 
+    }
+
+    private int countFlippable(int x, int y, Stone stone, int dx, int dy) {
+        int count = 0;
+        int yy = y + dy, xx = x + dx;
+        Stone opponent = stone.flip();
+        while (board[yy][xx] == opponent) {
+            ++count;
+            yy += dy;
+            xx += dx;
+        }
+
+        if (board[yy][xx] == stone)
+            return count;
+
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Board))
+            return false;
+
+        Board lhs = this;
+        Board rhs = (Board) obj;
+
+        for (int y = 0; y < MAP_HEIGHT; ++y) {
+            for (int x = 0; x < MAP_WIDTH; ++x) {
+                if (lhs.board[y][x] != rhs.board[y][x])
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        for (int y = 0; y < MAP_HEIGHT; ++y) {
+            for (int x = 0; x < MAP_WIDTH; ++x) {
+                hash += 37 * board[y][x].hashCode();
+            }
+        }
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(' ');
+        for (int x = 1; x <= WIDTH; ++x) {
+            builder.append((char)('0' + x));
+        }
+        builder.append('\n');
+        for (int y = 1; y <= HEIGHT; ++y) {
+            builder.append((char)('0' + y));
+            for (int x = 1; x <= WIDTH; ++x) {
+                switch (board[y][x]) {
+                case EMPTY:
+                    builder.append('.'); break;
+                case BLACK:
+                    builder.append('B'); break;
+                case WHITE:
+                    builder.append('W'); break;
+                case WALL:
+                    builder.append('*'); break;
+                }
+            }
+            builder.append('\n');
+        }
+
+        return builder.toString();
+    }
+}
