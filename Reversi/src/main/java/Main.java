@@ -1,9 +1,13 @@
 import player.Player;
 import ai.AlphaBetaSimpleAI;
+import ai.AlphaBetaEvaluationSimpleWithCompleteReadingAI;
 import ai.MinMaxSimpleAI;
+import ai.NegaScoutEvaluationSimpleAI;
+import ai.NegaScoutEvaluationSimpleWithCompleteReadingAI;
 import ai.SimpleAI;
 import board.Board;
 import board.Position;
+import board.Stone;
 import board.Turn;
 
 public class Main {
@@ -16,11 +20,15 @@ public class Main {
 
         //Player blackPlayer = new HumanPlayer(Turn.BLACK);
         //Player blackPlayer = new SimpleAI(Turn.BLACK);
-        Player blackPlayer = new MinMaxSimpleAI(Turn.BLACK, 5);
-        Player whitePlayer = new SimpleAI(Turn.WHITE);
+        //Player blackPlayer = new MinMaxSimpleAI(Turn.BLACK, 5);
+        Player blackPlayer = new AlphaBetaSimpleAI(Turn.BLACK, 5);
+        //Player whitePlayer = new SimpleAI(Turn.WHITE);
         //Player whitePlayer = new MinMaxSimpleAI(Turn.WHITE);
         //Player whitePlayer = new NegaMaxSimpleAI(Turn.WHITE);
-        // Player whitePlayer = new AlphaBetaSimpleAI(Turn.WHITE);
+        //Player whitePlayer = new AlphaBetaSimpleAI(Turn.WHITE, 5);
+        //Player whitePlayer = new AlphaBetaEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
+        //Player whitePlayer = new NegaScoutEvaluationSimpleAI(Turn.WHITE, 5);
+        Player whitePlayer = new NegaScoutEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
         
         while (true) {
             // 盤を見やすいように表示
@@ -46,5 +54,8 @@ public class Main {
             board.put(p.x, p.y, turn.stone());
             turn = turn.flip();
         }
+        
+        System.out.printf("BLACK = %d\n", board.countStone(Stone.BLACK));
+        System.out.printf("WHITE = %d\n", board.countStone(Stone.WHITE));
     }
 }

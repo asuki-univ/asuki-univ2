@@ -28,14 +28,17 @@ public class AITest {
         Player negamax = new NegaMaxSimpleAI(Turn.WHITE, 5);
         Player alphabeta = new AlphaBetaSimpleAI(Turn.WHITE, 5);
         Player alphabeta2 = new AlphaBetaEvaluationSimpleAI(Turn.WHITE, 5);
-
+        Player negascout = new NegaScoutEvaluationSimpleAI(Turn.WHITE, 5);
+        
         Position p1 = minmax.play(board);
         Position p2 = negamax.play(board);
         Position p3 = alphabeta.play(board);
         Position p4 = alphabeta2.play(board);
+        Position p5 = negascout.play(board);
 
         assertThat(p1, equalTo(p2));
         assertThat(p1, equalTo(p3));
         assertThat(p1, equalTo(p4));
+        assertThat(p1, equalTo(p5));
     }
 }
