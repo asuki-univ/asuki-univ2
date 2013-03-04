@@ -28,7 +28,7 @@ public class Board {
         }
     }
 
-    // Copy Constructor
+    // Copy Constructor (Maybe we should have clone() instead.)
     public Board(Board board) {
         for (int y = 0; y < MAP_HEIGHT; ++y)
             for (int x = 0; x < MAP_WIDTH; ++x)
@@ -96,6 +96,26 @@ public class Board {
         board[4][5] = board[5][4] = Stone.BLACK; 
     }
 
+    public int countStones() {
+        int count = 0;
+        for (int y = 1; y <= HEIGHT; ++y)
+            for (int x = 1; x <= WIDTH; ++x)
+                if (board[y][x] != Stone.EMPTY)
+                    ++count;
+        
+        return count;
+    }
+    
+    public int countStone(Stone stone) {
+        int count = 0;
+        for (int y = 1; y <= HEIGHT; ++y)
+            for (int x = 1; x <= WIDTH; ++x)
+                if (board[y][x] == stone)
+                    ++count;
+        
+        return count;
+    }
+    
     private int countFlippable(int x, int y, Stone stone, int dx, int dy) {
         int count = 0;
         int yy = y + dy, xx = x + dx;
