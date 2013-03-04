@@ -18,16 +18,17 @@ public class NegaMaxSimpleAI implements Player {
         { 100, -50, 35, 30, 30, 35, -50, 100 },
     };
     
-    private final int MAX_DEPTH = 5;
-    private Turn turn;
+    private final Turn turn;
+    private final int maxDepth;
     
-    public NegaMaxSimpleAI(Turn turn) {
+    public NegaMaxSimpleAI(Turn turn, int maxDepth) {
         this.turn = turn;
+        this.maxDepth = maxDepth;
     }
     
     @Override
     public Position play(Board board) {
-        return eval(board, MAX_DEPTH, turn.stone(), 0).getPosition();
+        return eval(board, maxDepth, turn.stone(), 0).getPosition();
     }
 
     private EvalResult eval(Board board, int restDepth, Stone stone, int scoreSum) {

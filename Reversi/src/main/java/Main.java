@@ -16,7 +16,7 @@ public class Main {
 
         //Player blackPlayer = new HumanPlayer(Turn.BLACK);
         //Player blackPlayer = new SimpleAI(Turn.BLACK);
-        Player blackPlayer = new MinMaxSimpleAI(Turn.BLACK);
+        Player blackPlayer = new MinMaxSimpleAI(Turn.BLACK, 5);
         Player whitePlayer = new SimpleAI(Turn.WHITE);
         //Player whitePlayer = new MinMaxSimpleAI(Turn.WHITE);
         //Player whitePlayer = new NegaMaxSimpleAI(Turn.WHITE);
