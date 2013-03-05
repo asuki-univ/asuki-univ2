@@ -1,6 +1,6 @@
 package ai;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import player.Player;
@@ -62,8 +62,8 @@ public class TranpositionEvaluationSimpleAI implements Player {
 
     @Override
     public Position play(Board board) {
-        return eval(board, maxDepth, 5, turn.stone(), 
-                new Hashtable<TranpositionTableKey, TranpositionTableValue>(),
+        return eval(board, maxDepth, 5, turn.stone(),
+                new HashMap<TranpositionTableKey, TranpositionTableValue>(),
                 new BoardScoreEvaluation(turn), Integer.MIN_VALUE, Integer.MAX_VALUE).getPosition();
     }
 

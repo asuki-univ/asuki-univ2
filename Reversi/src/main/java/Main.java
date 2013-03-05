@@ -5,6 +5,7 @@ import ai.MinMaxSimpleAI;
 import ai.NegaScoutEvaluationSimpleAI;
 import ai.NegaScoutEvaluationSimpleWithCompleteReadingAI;
 import ai.SimpleAI;
+import ai.TranpositionEvaluationCompleteReadingSimpleAI;
 import ai.TranpositionEvaluationSimpleAI;
 import board.Board;
 import board.Position;
@@ -30,7 +31,8 @@ public class Main {
         //Player whitePlayer = new AlphaBetaEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
         //Player whitePlayer = new NegaScoutEvaluationSimpleAI(Turn.WHITE, 5);
         //Player whitePlayer = new NegaScoutEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
-        Player whitePlayer = new TranpositionEvaluationSimpleAI(Turn.WHITE, 5);
+        //Player whitePlayer = new TranpositionEvaluationSimpleAI(Turn.WHITE, 5);
+        Player whitePlayer = new TranpositionEvaluationCompleteReadingSimpleAI(Turn.WHITE, 5, 15);
         
         while (true) {
             // 盤を見やすいように表示
