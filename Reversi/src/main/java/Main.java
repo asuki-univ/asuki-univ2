@@ -5,6 +5,7 @@ import ai.MinMaxSimpleAI;
 import ai.NegaScoutEvaluationSimpleAI;
 import ai.NegaScoutEvaluationSimpleWithCompleteReadingAI;
 import ai.SimpleAI;
+import ai.TranpositionEvaluationSimpleAI;
 import board.Board;
 import board.Position;
 import board.Stone;
@@ -28,7 +29,8 @@ public class Main {
         //Player whitePlayer = new AlphaBetaSimpleAI(Turn.WHITE, 5);
         //Player whitePlayer = new AlphaBetaEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
         //Player whitePlayer = new NegaScoutEvaluationSimpleAI(Turn.WHITE, 5);
-        Player whitePlayer = new NegaScoutEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
+        //Player whitePlayer = new NegaScoutEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
+        Player whitePlayer = new TranpositionEvaluationSimpleAI(Turn.WHITE, 5);
         
         while (true) {
             // 盤を見やすいように表示
