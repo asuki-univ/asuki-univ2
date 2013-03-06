@@ -6,6 +6,12 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import player.Player;
+import player.ai.AlphaBetaEvaluationSimpleAI;
+import player.ai.AlphaBetaSimpleAI;
+import player.ai.MinMaxSimpleAI;
+import player.ai.NegaMaxSimpleAI;
+import player.ai.NegaScoutEvaluationSimpleAI;
+import player.ai.TranpositionEvaluationSimpleAI;
 import board.Board;
 import board.Position;
 import board.Turn;
@@ -24,6 +30,7 @@ public class AITest {
                 "........");
 
         // MinMax, NegaMax, AlphaBeta should return the same evaluation. 
+        // Move Ordering might return the same evaluation hand, but it might be the different one.
         Player minmax = new MinMaxSimpleAI(Turn.WHITE, 5);
         Player negamax = new NegaMaxSimpleAI(Turn.WHITE, 5);
         Player alphabeta = new AlphaBetaSimpleAI(Turn.WHITE, 5);

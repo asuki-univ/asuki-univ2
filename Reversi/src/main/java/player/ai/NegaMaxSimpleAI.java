@@ -1,4 +1,4 @@
-package ai;
+package player.ai;
 
 import player.Player;
 import board.Board;
@@ -6,7 +6,7 @@ import board.Position;
 import board.Stone;
 import board.Turn;
 
-public class NegaMaxSimpleAI implements Player {
+public class NegaMaxSimpleAI extends Player {
     private static final int[][] EVAL_VALUES = {
         { 100, -50, 35, 30, 30, 35, -50, 100 },
         { -50, -70, 10, 15, 15, 10, -70, -50 },
@@ -18,11 +18,10 @@ public class NegaMaxSimpleAI implements Player {
         { 100, -50, 35, 30, 30, 35, -50, 100 },
     };
     
-    private final Turn turn;
     private final int maxDepth;
     
     public NegaMaxSimpleAI(Turn turn, int maxDepth) {
-        this.turn = turn;
+        super(turn);
         this.maxDepth = maxDepth;
     }
     

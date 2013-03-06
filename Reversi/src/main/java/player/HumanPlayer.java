@@ -6,11 +6,9 @@ import board.Board;
 import board.Position;
 import board.Turn;
 
-public class HumanPlayer implements Player {
-    private Turn turn;
-    
+public class HumanPlayer extends Player {
     public HumanPlayer(Turn turn) {
-        this.turn = turn;
+        super(turn);
     }
     
     public Position play(Board board) {

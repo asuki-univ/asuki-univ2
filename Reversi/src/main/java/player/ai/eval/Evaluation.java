@@ -1,4 +1,4 @@
-package ai.eval;
+package player.ai.eval;
 
 import board.Board;
 import board.Stone;

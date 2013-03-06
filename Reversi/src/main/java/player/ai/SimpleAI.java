@@ -1,11 +1,11 @@
-package ai;
+package player.ai;
 
 import player.Player;
 import board.Board;
 import board.Position;
 import board.Turn;
 
-public class SimpleAI implements Player {
+public class SimpleAI extends Player {
     private static final int[][] EVAL_VALUES = {
         { 100, -50, 35, 30, 30, 35, -50, 100 },
         { -50, -70, 10, 15, 15, 10, -70, -50 },
@@ -20,7 +20,7 @@ public class SimpleAI implements Player {
     private Turn turn;
     
     public SimpleAI(Turn turn) {
-        this.turn = turn;
+        super(turn);
     }
     
     @Override

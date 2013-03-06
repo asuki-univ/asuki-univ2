@@ -1,4 +1,4 @@
-package ai;
+package player.ai;
 
 import board.Position;
 

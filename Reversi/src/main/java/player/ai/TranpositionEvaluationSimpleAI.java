@@ -1,11 +1,11 @@
-package ai;
+package player.ai;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import player.Player;
-import ai.eval.BoardScoreEvaluation;
-import ai.eval.Evaluation;
+import player.ai.eval.BoardScoreEvaluation;
+import player.ai.eval.Evaluation;
 import board.Board;
 import board.Position;
 import board.Stone;
@@ -51,12 +51,11 @@ class TranpositionTableValue {
     }
 }
 
-public class TranpositionEvaluationSimpleAI implements Player {
-    protected final Turn turn;
+public class TranpositionEvaluationSimpleAI extends Player {
     private final int maxDepth;
 
     public TranpositionEvaluationSimpleAI(Turn turn, int maxDepth) {
-        this.turn = turn;
+        super(turn);        
         this.maxDepth = maxDepth;
     }
 
@@ -66,8 +65,9 @@ public class TranpositionEvaluationSimpleAI implements Player {
                 new HashMap<TranpositionTableKey, TranpositionTableValue>(),
                 new BoardScoreEvaluation(turn), Integer.MIN_VALUE, Integer.MAX_VALUE).getPosition();
     }
-
-    protected EvalResult eval(Board board, int restDepth, int restTranpositionDepth, Stone stone, Map<TranpositionTableKey, TranpositionTableValue> tranpositionTable, Evaluation evaluation, int alpha, int beta) {
+    
+    protected EvalResult eval(Board board, int restDepth, int restTranpositionDepth, Stone stone,
+            Map<TranpositionTableKey, TranpositionTableValue> tranpositionTable, Evaluation evaluation, int alpha, int beta) {
         if (restDepth == 0)
             return new EvalResult(evaluation.score(board, stone), null);
         

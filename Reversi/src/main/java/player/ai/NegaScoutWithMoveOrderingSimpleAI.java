@@ -1,19 +1,18 @@
-package ai;
+package player.ai;
 
 import player.Player;
-import ai.eval.BoardScoreEvaluation;
-import ai.eval.Evaluation;
+import player.ai.eval.BoardScoreEvaluation;
+import player.ai.eval.Evaluation;
 import board.Board;
 import board.Position;
 import board.Stone;
 import board.Turn;
 
-public class NegaScoutEvaluationSimpleAI implements Player {
-    protected final Turn turn;
+public class NegaScoutWithMoveOrderingSimpleAI extends Player {
     private final int maxDepth;
 
-    public NegaScoutEvaluationSimpleAI(Turn turn, int maxDepth) {
-        this.turn = turn;
+    public NegaScoutWithMoveOrderingSimpleAI(Turn turn, int maxDepth) {
+        super(turn);
         this.maxDepth = maxDepth;
     }
 

@@ -1,6 +1,6 @@
-package ai;
+package player.ai;
 
-import ai.eval.NumStoneEvaluation;
+import player.ai.eval.NumStoneEvaluation;
 import board.Board;
 import board.Position;
 import board.Turn;
