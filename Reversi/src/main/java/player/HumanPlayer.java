@@ -23,6 +23,7 @@ public class HumanPlayer extends Player {
                 continue;
             }
 
+            scanner.close();
             return new Position(x, y);
         }
     }
