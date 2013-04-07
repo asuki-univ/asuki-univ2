@@ -2,25 +2,25 @@ package stringsearch;
 
 public class RabinKarpStringSearch extends AbstractStringSearch {
 	@Override
-	public int search(String word, String text) {
-		if (word == null || "".equals(word))
+	public int search(String pattern, String text) {
+		if (pattern == null || "".equals(pattern))
 			throw new IllegalArgumentException();
 
-		if (text.length() < word.length())
+		if (text.length() < pattern.length())
 			return text.length();
 
-		int wordHash = hash(word);
-		int textHash = hash(text.substring(0, word.length()));
+		int patternHash = hash(pattern);
+		int textHash = hash(text.substring(0, pattern.length()));
 		
 		int i = 0;
 		while (true) {
-			if (wordHash == textHash && word.equals(text.substring(i, i + word.length())))
+			if (patternHash == textHash && pattern.equals(text.substring(i, i + pattern.length())))
 				return i;
 
-			if (text.length() <= i + word.length())
+			if (text.length() <= i + pattern.length())
 				return text.length();
 
-			textHash = textHash - text.charAt(i) + text.charAt(i + word.length());
+			textHash = textHash - text.charAt(i) + text.charAt(i + pattern.length());
 			++i;
 		}
 	}

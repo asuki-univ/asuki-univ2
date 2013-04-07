@@ -3,19 +3,19 @@ package stringsearch;
 public class KMPStringSearch extends AbstractStringSearch {
 
     @Override
-    public int search(String word, String text) {
-        if (word == null || "".equals(word))
+    public int search(String pattern, String text) {
+        if (pattern == null || "".equals(pattern))
             throw new IllegalArgumentException();
         
-        int[] table = makeTable(word);
+        int[] table = makeTable(pattern);
         
         int m = 0;
         int i = 0;
         
         while (m + i < text.length()) {
-            if (word.charAt(i) == text.charAt(m + i)) {
+            if (pattern.charAt(i) == text.charAt(m + i)) {
                 i = i + 1;
-                if (i == word.length())
+                if (i == pattern.length())
                     return m;
             } else {
                 m = m + i - table[i];
