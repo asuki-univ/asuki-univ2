@@ -2,7 +2,7 @@ package stringsearch;
 
 public class KBPStringSearchTest extends AbstractStringSearchTest {
     @Override
-    protected AbstractStringSearch searcher() {
+    protected StringSearcher searcher() {
         return new KMPStringSearch();
     }
 }

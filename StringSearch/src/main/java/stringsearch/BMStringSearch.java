@@ -2,8 +2,7 @@ package stringsearch;
 
 import java.util.Arrays;
 
-
-public class BMStringSearch extends AbstractStringSearch {
+public class BMStringSearch implements StringSearcher {
     final private int ALPHABETA_SIZE = 256;
 
     @Override

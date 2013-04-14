@@ -1,6 +1,6 @@
 package stringsearch;
 
-public class KMPStringSearch extends AbstractStringSearch {
+public class KMPStringSearch implements StringSearcher {
 
     @Override
     public int search(String pattern, String text) {
@@ -9,22 +9,22 @@ public class KMPStringSearch extends AbstractStringSearch {
         
         int[] table = makeTable(pattern);
         
-        int m = 0;
         int i = 0;
+        int m = 0;
         
-        while (m + i < text.length()) {
-            if (pattern.charAt(i) == text.charAt(m + i)) {
-                i = i + 1;
-                if (i == pattern.length())
-                    return m;
+        while (i + m < text.length()) {
+            if (pattern.charAt(m) == text.charAt(i + m)) {
+                m = m + 1;
+                if (m == pattern.length())
+                    return i;
             } else {
-                m = m + i - table[i];
-                if (i > 0)
-                    i = table[i];
+                i = i + m - table[m];
+                if (m > 0)
+                    m = table[m];
             }
         }
         
-        // We couldn't find the |word| in text.
+        // We couldn't find the |pattern| in text.
         return text.length();
     }
     

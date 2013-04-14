@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 public abstract class AbstractStringSearchTest {
-    protected abstract AbstractStringSearch searcher();
+    protected abstract StringSearcher searcher();
     
     @Test
     public void findFromEmptyText() {
