@@ -1,12 +1,6 @@
 import player.Player;
-import player.ai.AlphaBetaEvaluationSimpleWithCompleteReadingAI;
-import player.ai.AlphaBetaSimpleAI;
-import player.ai.MinMaxSimpleAI;
-import player.ai.NegaScoutEvaluationSimpleAI;
-import player.ai.NegaScoutEvaluationSimpleWithCompleteReadingAI;
+import player.ai.MonteCarloPlayer;
 import player.ai.SimpleAI;
-import player.ai.TranpositionEvaluationCompleteReadingSimpleAI;
-import player.ai.TranpositionEvaluationSimpleAI;
 import board.Board;
 import board.Position;
 import board.Stone;
@@ -20,11 +14,13 @@ public class Main {
         Turn turn = Turn.BLACK;
         boolean hasPassed = false;
 
+        //Player blackPlayer = new RandomPlayer(Turn.BLACK);
+        Player blackPlayer = new MonteCarloPlayer(Turn.BLACK);
         //Player blackPlayer = new HumanPlayer(Turn.BLACK);
         //Player blackPlayer = new SimpleAI(Turn.BLACK);
         //Player blackPlayer = new MinMaxSimpleAI(Turn.BLACK, 5);
-        Player blackPlayer = new AlphaBetaSimpleAI(Turn.BLACK, 5);
-        //Player whitePlayer = new SimpleAI(Turn.WHITE);
+        //Player blackPlayer = new AlphaBetaSimpleAI(Turn.BLACK, 5);
+        Player whitePlayer = new SimpleAI(Turn.WHITE);
         //Player whitePlayer = new MinMaxSimpleAI(Turn.WHITE);
         //Player whitePlayer = new NegaMaxSimpleAI(Turn.WHITE);
         //Player whitePlayer = new AlphaBetaSimpleAI(Turn.WHITE, 5);
@@ -32,7 +28,7 @@ public class Main {
         //Player whitePlayer = new NegaScoutEvaluationSimpleAI(Turn.WHITE, 5);
         //Player whitePlayer = new NegaScoutEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
         //Player whitePlayer = new TranpositionEvaluationSimpleAI(Turn.WHITE, 5);
-        Player whitePlayer = new TranpositionEvaluationCompleteReadingSimpleAI(Turn.WHITE, 5, 15);
+        //Player whitePlayer = new TranpositionEvaluationCompleteReadingSimpleAI(Turn.WHITE, 5, 15);
         
         while (true) {
             // 盤を見やすいように表示

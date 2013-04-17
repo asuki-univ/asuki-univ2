@@ -17,8 +17,6 @@ public class SimpleAI extends Player {
         { 100, -50, 35, 30, 30, 35, -50, 100 },
     };
 
-    private Turn turn;
-    
     public SimpleAI(Turn turn) {
         super(turn);
     }
