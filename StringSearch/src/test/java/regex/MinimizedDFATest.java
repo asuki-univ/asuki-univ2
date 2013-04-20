@@ -15,11 +15,11 @@ public class MinimizedDFATest extends AutomataTest {
     }
 
     @Test
-    public void testSize() {       
-        assertThat(makeDFA("a").getNodeSize(), is(2));        
-        assertThat(makeDFA("aa").getNodeSize(), is(3));       
-        assertThat(makeDFA("a*").getNodeSize(), is(1));        
-        assertThat(makeDFA("aa*").getNodeSize(), is(2));        
-        assertThat(makeDFA("a*b").getNodeSize(), is(2));        
+    public void testSize() {
+        assertThat(makeDFA("a").getNodeSize(), is(2));
+        assertThat(makeDFA("aa").getNodeSize(), is(3));
+        assertThat(makeDFA("a*").getNodeSize(), is(1));
+        assertThat(makeDFA("aa*").getNodeSize(), is(2));
+        assertThat(makeDFA("a*b").getNodeSize(), is(2));
     }
 }

@@ -48,7 +48,7 @@ class REOptional extends RENode {
     @Override
     NFA createAutomata() {
         NFA am = node.createAutomata();
-        am.getBeginNode().addEdge(am.getEndNode(), Label.newEmptyLabel());        
+        am.getBeginNode().addEdge(am.getEndNode(), Label.newEmptyLabel());
         return am;
     }
 }
@@ -66,10 +66,10 @@ class RESequence extends RENode {
     NFA createAutomata() {
         NFA am1 = r1.createAutomata();
         NFA am2 = r2.createAutomata();
-        
+
         am1.getEndNode().setFinal(false);
         am1.getEndNode().addEdge(am2.getBeginNode(), Label.newEmptyLabel());
-        
+
         return new NFA(am1.getBeginNode(), am2.getEndNode());
     }
 }
@@ -82,22 +82,22 @@ class RESelection extends RENode {
         this.r1 = r1;
         this.r2 = r2;
     }
-    
+
     @Override
     NFA createAutomata() {
         NFA am1 = r1.createAutomata();
         NFA am2 = r2.createAutomata();
-        
+
         NFANode beginNode = new NFANode(false);
         NFANode endNode = new NFANode(true);
-        
+
         am1.getEndNode().setFinal(false);
         am2.getEndNode().setFinal(false);
         beginNode.addEdge(am1.getBeginNode(), Label.newEmptyLabel());
         beginNode.addEdge(am2.getBeginNode(), Label.newEmptyLabel());
         am1.getEndNode().addEdge(endNode, Label.newEmptyLabel());
         am2.getEndNode().addEdge(endNode, Label.newEmptyLabel());
-        
+
         return new NFA(beginNode, endNode);
     }
 }
@@ -112,7 +112,7 @@ class RESelection extends RENode {
 //         |  c1
 // r      ::= c1 | r
 //         |  c2
-// 
+//
 public class RegexParser {
     private static final char[] META_CHARACTERS = new char[] {
         '(', ')', '*', '?', '|'
@@ -136,7 +136,7 @@ public class RegexParser {
     }
 
     public RENode parse() {
-        RENode node = parseRegex(); 
+        RENode node = parseRegex();
         if (pos != regex.length())
             return null;
 

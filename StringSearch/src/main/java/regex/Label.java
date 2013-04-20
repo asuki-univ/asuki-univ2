@@ -18,11 +18,11 @@ public class Label {
     public boolean isEmpty() {
         return c == '\0';
     }
-    
+
     public boolean accepts(char c) {
         return this.c == c;
     }
-    
+
     public char getChar() {
         return c;
     }

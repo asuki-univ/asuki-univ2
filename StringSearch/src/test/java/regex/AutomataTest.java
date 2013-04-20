@@ -6,15 +6,15 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public abstract class AutomataTest {
-    public abstract boolean accepts(String regex, String s); 
-    
+    public abstract boolean accepts(String regex, String s);
+
     @Test
     public void testMatchSimple() {
         assertTrue(accepts("a", "a"));
-        
+
         assertFalse(accepts("a", "b"));
     }
-    
+
     @Test
     public void testMatchStar() {
         assertTrue(accepts("a*", ""));
@@ -50,7 +50,7 @@ public abstract class AutomataTest {
         assertFalse(accepts("ab", "abb"));
         assertFalse(accepts("ab", "aba"));
     }
-    
+
     @Test
     public void testMatchSelection() {
         assertTrue(accepts("a|b", "a"));
@@ -59,7 +59,7 @@ public abstract class AutomataTest {
         assertTrue(accepts("a|ab", "ab"));
         assertTrue(accepts("a|aa*", "aa"));
         assertTrue(accepts("(abc|xyz)", "xyz"));
-        
+
         assertFalse(accepts("a|b", "c"));
         assertFalse(accepts("a|bc", "ac"));
         assertFalse(accepts("ab|ba", "aa"));
