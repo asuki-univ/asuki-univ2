@@ -54,6 +54,10 @@ public class DFA {
         this.beginNode = beginNode;
     }
     
+    public int getNodeSize() { 
+        return makeNodeList().size();
+    }
+    
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
