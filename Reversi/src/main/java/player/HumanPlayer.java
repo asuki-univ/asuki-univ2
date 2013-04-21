@@ -11,6 +11,7 @@ public class HumanPlayer extends Player {
         super(turn);
     }
     
+    @Override
     public Position play(Board board) {
         Scanner scanner = new Scanner(System.in);
         
@@ -23,7 +24,7 @@ public class HumanPlayer extends Player {
                 continue;
             }
 
-            scanner.close();
+            //scanner.close();
             return new Position(x, y);
         }
     }

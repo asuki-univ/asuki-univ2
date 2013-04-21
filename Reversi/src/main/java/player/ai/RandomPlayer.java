@@ -22,11 +22,12 @@ public class RandomPlayer extends Player {
     
     @Override
     public Position play(Board board) {
+        // 打てるところにランダムに打つ
         while (true) {
             int x = random.nextInt(8) + 1;
             int y = random.nextInt(8) + 1;
             if (!board.isPuttable(x, y, turn.stone())) {
-                System.out.println("Invalid.");
+                //System.out.println("Invalid.");
                 continue;
             }
             
