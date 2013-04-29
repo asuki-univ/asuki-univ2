@@ -23,37 +23,49 @@ public class SimpleMonteCarloPlayer extends Player {
 
     @Override
     public Position play(Board board) {
+        long start = System.currentTimeMillis();
         double maxRate = -1;
-        Position maxPosition = new Position(0, 0);
+        Position maxPosition = null;
         // 全部の打てる手で同じ回数だけプレイアウトを行う
-        for (int x = 1; x <= 8; ++x) {
-            for (int y = 1; y <= 8; ++y) {
+        for (int y = 1; y <= Board.HEIGHT; ++y) {
+            for (int x = 1; x <= Board.WIDTH; ++x) {
                 if (!board.isPuttable(x, y, turn.stone())) {
                     continue;
                 }
-                Board nextBoard = new Board(board);
-                nextBoard.put(x, y, turn.stone());
-                double rate = playout(x, y, nextBoard);
-                System.out.println("x: " + x + ", y: " + y + ", rate: " + rate);
+                double rate = playout(x, y, board);
+                // System.out.println("x: " + x + ", y: " + y + ", rate: " + rate);
                 if (rate > maxRate) {
                     maxRate = rate;
                     maxPosition = new Position(x, y);
                 }
             }
         }
+        long end = System.currentTimeMillis();
+        System.out.println("play duration: " + (end - start));
         return maxPosition;
     }
 
     private double playout(int x, int y, Board board) {
-        int win = 0;
-        Game game = new Game();
+        // ランダムに打ち合うプレーヤーを準備
         Player blackPlayer = new RandomPlayer(Turn.BLACK);
+        try {
+            Thread.sleep(2);
+        } catch (InterruptedException e) {
+        }
         Player whitePlayer = new RandomPlayer(Turn.WHITE);
 
+        // 1手進める
+        Board nextBoard = new Board(board);
+        nextBoard.put(x, y, turn.stone());
+        
+        // 勝敗を記録
+        int win = 0;
+        Game game = new Game();
         for (int count = 0; count < playoutCount; ++count) {
-            Winner winner = game.play(blackPlayer, whitePlayer, new Board(board), turn.flip(), false);
-            if (turn == Turn.BLACK && winner == Winner.BLACK || turn == Turn.WHITE && winner == Winner.WHITE)
+            Winner winner = game.play(blackPlayer, whitePlayer, new Board(nextBoard), turn.flip(), false);
+            if (turn == Turn.BLACK && winner == Winner.BLACK || turn == Turn.WHITE && winner == Winner.WHITE) {
                 ++win;
+            }
         }
         return (double) win / playoutCount;
     }
