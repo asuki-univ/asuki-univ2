@@ -16,13 +16,13 @@ public abstract class AbstractRunner {
             if ("NODE_COORD_SECTION".equals(s))
                 break;
         }
-        
+
         List<Point> points = new ArrayList<Point>();
         while (scanner.hasNextInt()) {
             scanner.nextInt(); // skip id.
             int x = scanner.nextInt();
             int y = scanner.nextInt();
-            
+
             points.add(new Point(x, y));
         }
 
