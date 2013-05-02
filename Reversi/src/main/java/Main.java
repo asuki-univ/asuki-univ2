@@ -17,7 +17,8 @@ public class Main {
         //Player blackPlayer = new AlphaBetaSimpleAI(Turn.BLACK, 5);
         //Player whitePlayer = new SimpleAI(Turn.WHITE);
         //Player whitePlayer = new SimpleMonteCarloPlayer(Turn.WHITE, 100);
-        Player whitePlayer = new MinMaxSimpleAI(Turn.WHITE, 5);
+        Player whitePlayer = new UCB1MonteCarloPlayer(Turn.WHITE, 1000);
+        //Player whitePlayer = new MinMaxSimpleAI(Turn.WHITE, 5);
         //Player whitePlayer = new NegaMaxSimpleAI(Turn.WHITE, 5);
         //Player whitePlayer = new AlphaBetaSimpleAI(Turn.WHITE, 5);
         //Player whitePlayer = new AlphaBetaEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);

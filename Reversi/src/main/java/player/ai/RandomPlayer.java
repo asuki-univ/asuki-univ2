@@ -7,11 +7,6 @@ import board.Board;
 import board.Position;
 import board.Turn;
 
-/**
- * 
- * @author tomohiko
- *
- */
 public class RandomPlayer extends Player {
 
     private Random random = new Random();

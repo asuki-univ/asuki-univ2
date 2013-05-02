@@ -7,11 +7,6 @@ import board.Board;
 import board.Position;
 import board.Turn;
 
-/**
- * 
- * @author tomohiko
- * 
- */
 public class SimpleMonteCarloPlayer extends Player {
 
     private int playoutCount;
@@ -48,10 +43,6 @@ public class SimpleMonteCarloPlayer extends Player {
     private double playout(int x, int y, Board board) {
         // ランダムに打ち合うプレーヤーを準備
         Player blackPlayer = new RandomPlayer(Turn.BLACK);
-        try {
-            Thread.sleep(2);
-        } catch (InterruptedException e) {
-        }
         Player whitePlayer = new RandomPlayer(Turn.WHITE);
 
         // 1手進める

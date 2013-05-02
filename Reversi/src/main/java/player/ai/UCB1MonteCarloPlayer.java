@@ -18,6 +18,7 @@ import board.Turn;
  */
 public class UCB1MonteCarloPlayer extends Player {
 
+    private static final double UCB_COEFFICIENT = 0.2;
     private int maxUCBCount;
 
     public UCB1MonteCarloPlayer(Turn turn, int maxUCBCount) {
@@ -27,6 +28,7 @@ public class UCB1MonteCarloPlayer extends Player {
 
     @Override
     public Position play(Board board) {
+        long start = System.currentTimeMillis();
         Map<Position, PlayoutResult> counter = new HashMap<Position, PlayoutResult>();
         int ucbCount = 0;
         
@@ -44,13 +46,13 @@ public class UCB1MonteCarloPlayer extends Player {
         }
         
         // UCB を計算し次の playout 対象を選ぶ
-        Position maxPosition = new Position(0, 0);
+        Position maxPosition = null;
         for (; ucbCount < maxUCBCount; ++ucbCount) {
             double maxUCB = -1;
             for (Map.Entry<Position, PlayoutResult> entry : counter.entrySet()) {
                 Position position = entry.getKey();
-                PlayoutResult result = entry.getValue();
-                double ucb = (double) result.winCount / result.playoutCount + Math.sqrt(2 * Math.log(ucbCount) / result.playoutCount);
+                PlayoutResult playoutResult = entry.getValue();
+                double ucb = (double) playoutResult.winCount / playoutResult.playoutCount + UCB_COEFFICIENT * Math.sqrt(Math.log(ucbCount) / playoutResult.playoutCount);
                 //System.out.println("x: " + position.x + ", y: " + position.y + ", ucb: " + ucb);
                 if (ucb > maxUCB) {
                     maxUCB = ucb;
@@ -63,9 +65,21 @@ public class UCB1MonteCarloPlayer extends Player {
             updatingResult.winCount += win;
         }
         System.out.println(counter);
-        
+        Position result = null;
+        double maxRate = -1;
+        for (Map.Entry<Position, PlayoutResult> entry : counter.entrySet()) {
+            Position position = entry.getKey();
+            PlayoutResult playoutResult = entry.getValue();
+            double winRate = (double) playoutResult.winCount / playoutResult.playoutCount;
+            if (maxRate < winRate) {
+                maxRate = winRate;
+                result = position;
+            }
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("play duration: " + (end - start));
         // 最終的な手を返す
-        return maxPosition;
+        return result;
     }
 
     private int playout(int x, int y, Board board) {
@@ -75,10 +89,6 @@ public class UCB1MonteCarloPlayer extends Player {
         
         // ランダムに打ち合うプレーヤーを準備
         Player blackPlayer = new RandomPlayer(Turn.BLACK);
-        try {
-            Thread.sleep(2);
-        } catch (InterruptedException e) {
-        }
         Player whitePlayer = new RandomPlayer(Turn.WHITE);
 
         // 1回だけ戦わせる
