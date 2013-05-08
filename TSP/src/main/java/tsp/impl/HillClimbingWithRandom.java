@@ -1,4 +1,4 @@
-package tsp;
+package tsp.impl;
 
 import java.awt.Point;
 import java.util.List;
@@ -18,8 +18,8 @@ public class HillClimbingWithRandom extends HillClimbing {
         // 何度か探してもうまくいかない場合は、全探索してスコアがよくなるものがあるかどうかをチェック。
 
         for (int t = 0; t < 100; ++t) {
-            int i = random.nextInt(points.size() - 1) + 1;
-            int j = random.nextInt(points.size() - 1) + 1;
+            int i = random.nextInt(currentState.size() - 1) + 1;
+            int j = random.nextInt(currentState.size() - 1) + 1;
 
             if (i == j)
                 continue;
@@ -32,7 +32,7 @@ public class HillClimbingWithRandom extends HillClimbing {
 
             double improved = scoreImprovementIfSwapped(i, j);
             if (improved > 0) {
-                swap(i, j);
+                currentState.swap(i, j);
                 return true;
             }
         }

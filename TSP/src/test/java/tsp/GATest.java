@@ -5,6 +5,9 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+import tsp.impl.Gene;
+import tsp.impl.IndexConverter;
+
 
 public class GATest {
     @Test

@@ -1,4 +1,4 @@
-package tsp;
+package tsp.impl;
 
 import java.awt.Point;
 import java.util.List;
@@ -16,17 +16,12 @@ public class SimulatedAnnealing extends HillClimbing {
 
     @Override
     public void run() {
-        if (points.size() <= 3)
+        if (currentState.size() <= 3)
             return;
 
         while (currentTemperature > 0) {
             step();
         }
-    }
-
-    @Override
-    public List<Point> getResult() {
-        return points;
     }
 
     public boolean step() {
@@ -41,9 +36,13 @@ public class SimulatedAnnealing extends HillClimbing {
         if (currentTemperature <= 0)
             return super.step();
 
-        final int N = points.size();
+        final int N = currentState.size();
 
         // 適当に近傍を選ぶ。
+        // 1. (i, j) を入れ替える
+        // 2. (i, j) の間をreverseする
+        // 3. i を j の後に動かす or j を i の後に動かす、など。
+
         int i = random.nextInt(N - 1) + 1;
         int j = random.nextInt(N - 1) + 1;
         if (i == j)
@@ -56,8 +55,9 @@ public class SimulatedAnnealing extends HillClimbing {
         }
 
         double d = scoreImprovementIfSwapped(i, j);
+        // TODO: 符号が多分違うのと、オーダーが微妙なのとの両方。
         if (d > 0 || random.nextDouble() < Math.exp(d / currentTemperature)) {
-            swap(i, j);
+            currentState.swap(i, j);
             return true;
         }
 

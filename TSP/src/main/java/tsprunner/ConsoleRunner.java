@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.List;
 
 import tsp.AbstractTSPSolver;
-import tsp.HillClimbing;
+import tsp.impl.HillClimbing;
 
 public class ConsoleRunner extends AbstractRunner {
 	public static void main(String[] args) {

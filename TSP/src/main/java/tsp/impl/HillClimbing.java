@@ -1,7 +1,9 @@
-package tsp;
+package tsp.impl;
 
 import java.awt.Point;
 import java.util.List;
+
+import tsp.AbstractTSPSolver;
 
 public class HillClimbing extends AbstractTSPSolver {
     public HillClimbing(List<Point> points) {
@@ -10,16 +12,11 @@ public class HillClimbing extends AbstractTSPSolver {
 
     @Override
     public void run() {
-        if (points.size() <= 3)
+        if (this.currentState.getPoints().size() <= 3)
             return;
 
         while (step()) {
         }
-    }
-
-    @Override
-    public List<Point> getResult() {
-        return points;
     }
 
     // 1 step 進め、解が改ざんされたならば true を返す。
@@ -35,7 +32,7 @@ public class HillClimbing extends AbstractTSPSolver {
     // +d(i-1, j)+d(j, i+1)+d(j-1, i)+d(i, j+1)
 
     public boolean step() {
-        final int N = points.size();
+        final int N = currentState.size();
 
         double maxImprove = 0;
         int iMaxImprove = -1, jMaxImprove = -1;
@@ -57,20 +54,20 @@ public class HillClimbing extends AbstractTSPSolver {
         if (iMaxImprove <= 0)
             return false;
 
-        swap(iMaxImprove, jMaxImprove);
+        currentState.swap(iMaxImprove, jMaxImprove);
         return true;
     }
 
     public double scoreImprovementIfSwapped(int i, int j) {
         assert (i < j);
         if (j == i + 1) {
-            double removedDist = distance(i-1,i) + distance(i+1,i+2);
-            double addedDist = distance(i-1, i+1) + distance(i, i+2);
+            double removedDist = currentState.distance(i-1,i) + currentState.distance(i+1,i+2);
+            double addedDist = currentState.distance(i-1, i+1) + currentState.distance(i, i+2);
             double improvedDist = removedDist - addedDist;
             return improvedDist;
         } else {
-            double removedDist = distance(i-1, i) + distance(i, i+1) + distance(j-1, j) + distance(j, j+1);
-            double addedDist = distance(i-1, j) + distance(j, i+1) + distance(j-1, i) + distance(i, j+1);
+            double removedDist = currentState.distance(i-1, i) + currentState.distance(i, i+1) + currentState.distance(j-1, j) + currentState.distance(j, j+1);
+            double addedDist = currentState.distance(i-1, j) + currentState.distance(j, i+1) + currentState.distance(j-1, i) + currentState.distance(i, j+1);
             double improvedDist = removedDist - addedDist;
             return improvedDist;
         }
