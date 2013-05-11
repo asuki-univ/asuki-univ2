@@ -4,7 +4,6 @@
 	<groupId>asuki-univ</groupId>
 	<artifactId>TSP</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>

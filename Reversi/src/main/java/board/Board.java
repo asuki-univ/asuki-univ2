@@ -34,7 +34,7 @@ public class Board {
             for (int x = 0; x < MAP_WIDTH; ++x)
                 this.board[y][x] = board.board[y][x];
     }
-    
+
     // これは単にめんどくさいので追加しただけ。あとで取る
     public Board(String str) {
         this();
@@ -91,9 +91,9 @@ public class Board {
         for (int y = 1; y <= HEIGHT; ++y)
             for (int x = 1; x <= WIDTH; ++x)
                 board[y][x] = Stone.EMPTY;
-        
-        board[4][4] = board[5][5] = Stone.WHITE; 
-        board[4][5] = board[5][4] = Stone.BLACK; 
+
+        board[4][4] = board[5][5] = Stone.WHITE;
+        board[4][5] = board[5][4] = Stone.BLACK;
     }
 
     public int countStones() {
@@ -102,20 +102,20 @@ public class Board {
             for (int x = 1; x <= WIDTH; ++x)
                 if (board[y][x] != Stone.EMPTY)
                     ++count;
-        
+
         return count;
     }
-    
+
     public int countStone(Stone stone) {
         int count = 0;
         for (int y = 1; y <= HEIGHT; ++y)
             for (int x = 1; x <= WIDTH; ++x)
                 if (board[y][x] == stone)
                     ++count;
-        
+
         return count;
     }
-    
+
     private int countFlippable(int x, int y, Stone stone, int dx, int dy) {
         int count = 0;
         int yy = y + dy, xx = x + dx;
@@ -189,8 +189,37 @@ public class Board {
 
         return builder.toString();
     }
-    
+
     public void show() {
         System.out.println(toString());
     }
+
+    // ----------
+
+    public Stone get(Position p) {
+        return board[p.y][p.x];
+    }
+
+    public Stone get(int x, int y) {
+        return board[y][x];
+    }
+
+    public Stone[] getHorizontal(int y) {
+        Stone[] stones = new Stone[WIDTH];
+        for (int i = 0; i < WIDTH; ++i) {
+            stones[i] = get(i + 1, y);
+        }
+
+        return stones;
+    }
+
+    public Stone[] getVertical(int x) {
+        Stone[] stones = new Stone[HEIGHT];
+        for (int i = 0; i < HEIGHT; ++i) {
+            stones[i] = get(x, i + 1);
+        }
+
+        return stones;
+    }
+
 }
