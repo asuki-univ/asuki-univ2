@@ -7,7 +7,6 @@ import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class WThorParams {
     private static final int[] BEKI3 = new int[] {
@@ -36,34 +35,68 @@ public class WThorParams {
 
     public static final int ALL_PARAMS_SIZE = EDGE2X_OFFSET + EDGE2X_SIZE;
 
-    private double[] params = new double[ALL_PARAMS_SIZE];
+    private static double LAMBDA = 0.04;
+
+    private double[] values = new double[ALL_PARAMS_SIZE];
+    private double squareSum = 0;
+
+    public WThorParams() {
+    }
+
+    public WThorParams(String filename) throws IOException {
+        load(filename);
+
+        squareSum = 0;
+        for (int i = 0; i < ALL_PARAMS_SIZE; ++i)
+            squareSum += values[i] * values[i];
+    }
+
+    public double getSquareSumLambda() {
+        return squareSum * LAMBDA;
+    }
 
     public double get(int index) {
-        return params[index];
+        return values[index];
     }
 
     public void add(int index, double value) {
-        params[index] += value;
+        set(index, get(index) + value);
     }
 
-    public WThorParams makeWThorParamByAdding(WThorParams diff, double alpha) {
+    public void set(int index, double value) {
+        squareSum -= values[index] * values[index];
+        values[index] = value;
+        squareSum += values[index] * values[index];
+    }
+
+    public void ensureMinValue(double minValue) {
+        for (int i = 0; i < ALL_PARAMS_SIZE; ++i) {
+            if (values[i] < minValue)
+                set(i, minValue);
+        }
+    }
+
+    public WThorParams makeWThorParamByAdding(WThorParams diff, WThorAlpha alpha) {
         WThorParams result = new WThorParams();
-        for (int i = 0; i < ALL_PARAMS_SIZE; ++i)
-            result.params[i] = this.params[i] + alpha * diff.params[i];
+        for (int i = 0; i < ALL_PARAMS_SIZE; ++i) {
+            double value = this.values[i] + 2 * alpha.alpha(i) * diff.values[i] - 2 * this.values[i] * alpha.alpha(i) * LAMBDA;
+            result.set(i, value);
+        }
+
         return result;
     }
 
     public void save(String filename) throws IOException {
         DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename)));
         for (int i = 0; i < ALL_PARAMS_SIZE; ++i)
-            dos.writeDouble(params[i]);
+            dos.writeDouble(values[i]);
         dos.close();
     }
 
     public void load(String filename) throws IOException {
         DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(filename)));
         for (int i = 0; i < ALL_PARAMS_SIZE; ++i)
-            params[i] = dis.readDouble();
+            values[i] = dis.readDouble();
         dis.close();
     }
 }

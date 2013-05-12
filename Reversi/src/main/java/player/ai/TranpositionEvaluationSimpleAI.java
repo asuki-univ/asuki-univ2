@@ -14,25 +14,25 @@ import board.Turn;
 class TranpositionTableKey {
     private final int restDepth;
     private final Board board;
-    
+
     public TranpositionTableKey(int restDepth, Board board) {
         this.restDepth = restDepth;
         this.board = board;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof TranpositionTableKey))
             return false;
-        
+
         TranpositionTableKey lhs = this;
         TranpositionTableKey rhs = (TranpositionTableKey) obj;
-        
+
         if (lhs.restDepth != rhs.restDepth)
             return false;
         return lhs.board.equals(rhs.board);
     }
-    
+
     @Override
     public int hashCode() {
         return 37 * restDepth + board.hashCode();
@@ -43,7 +43,7 @@ class TranpositionTableValue {
     public final int lower;
     public final int upper;
     public final Position position;
-    
+
     public TranpositionTableValue(int lower, int upper, Position position) {
         this.lower = lower;
         this.upper = upper;
@@ -52,10 +52,10 @@ class TranpositionTableValue {
 }
 
 public class TranpositionEvaluationSimpleAI extends Player {
-    private final int maxDepth;
+    protected final int maxDepth;
 
     public TranpositionEvaluationSimpleAI(Turn turn, int maxDepth) {
-        super(turn);        
+        super(turn);
         this.maxDepth = maxDepth;
     }
 
@@ -65,12 +65,12 @@ public class TranpositionEvaluationSimpleAI extends Player {
                 new HashMap<TranpositionTableKey, TranpositionTableValue>(),
                 new BoardScoreEvaluation(turn), Integer.MIN_VALUE, Integer.MAX_VALUE).getPosition();
     }
-    
+
     protected EvalResult eval(Board board, int restDepth, int restTranpositionDepth, Stone stone,
             Map<TranpositionTableKey, TranpositionTableValue> tranpositionTable, Evaluation evaluation, int alpha, int beta) {
         if (restDepth == 0)
             return new EvalResult(evaluation.score(board, stone), null);
-        
+
         TranpositionTableKey key = new TranpositionTableKey(restTranpositionDepth, board);
         int lower = Integer.MIN_VALUE;
         int upper = Integer.MAX_VALUE;
@@ -115,18 +115,18 @@ public class TranpositionEvaluationSimpleAI extends Player {
 
                 // beta cut
                 if (maxScore >= beta)
-                    break EXTERNAL_LOOP;                
+                    break EXTERNAL_LOOP;
             }
         }
 
         if (didPlayed) {
             assert (p != null);
-            
+
             if (restTranpositionDepth >= 0) {
                 if (maxScore <= alpha)
                     tranpositionTable.put(key,  new TranpositionTableValue(lower, maxScore, p));
                 else if (beta <= maxScore)
-                    tranpositionTable.put(key,  new TranpositionTableValue(maxScore, upper, p));                
+                    tranpositionTable.put(key,  new TranpositionTableValue(maxScore, upper, p));
                 else
                     tranpositionTable.put(key,  new TranpositionTableValue(maxScore, maxScore, p));
             }

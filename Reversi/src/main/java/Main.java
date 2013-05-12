@@ -1,6 +1,7 @@
 import player.Player;
 import player.ai.AlphaBetaEvaluationSimpleWithCompleteReadingAI;
 import player.ai.AlphaBetaSimpleAI;
+import player.ai.LearnedAI;
 import player.ai.MinMaxSimpleAI;
 import player.ai.NegaScoutEvaluationSimpleAI;
 import player.ai.NegaScoutEvaluationSimpleWithCompleteReadingAI;
@@ -13,7 +14,7 @@ import board.Stone;
 import board.Turn;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Board board = new Board();
         board.setup();
 
@@ -23,7 +24,8 @@ public class Main {
         //Player blackPlayer = new HumanPlayer(Turn.BLACK);
         //Player blackPlayer = new SimpleAI(Turn.BLACK);
         //Player blackPlayer = new MinMaxSimpleAI(Turn.BLACK, 5);
-        Player blackPlayer = new AlphaBetaSimpleAI(Turn.BLACK, 5);
+        // Player blackPlayer = new AlphaBetaSimpleAI(Turn.BLACK, 5);
+        Player blackPlayer = new LearnedAI(turn, 5, 15);
         //Player whitePlayer = new SimpleAI(Turn.WHITE);
         //Player whitePlayer = new MinMaxSimpleAI(Turn.WHITE);
         //Player whitePlayer = new NegaMaxSimpleAI(Turn.WHITE);
@@ -33,11 +35,11 @@ public class Main {
         //Player whitePlayer = new NegaScoutEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
         //Player whitePlayer = new TranpositionEvaluationSimpleAI(Turn.WHITE, 5);
         Player whitePlayer = new TranpositionEvaluationCompleteReadingSimpleAI(Turn.WHITE, 5, 15);
-        
+
         while (true) {
             // 盤を見やすいように表示
             board.show();
-            
+
             // どこかに置けないならばパスをしなければならない。
             if (!board.isPuttableSomewhere(turn.stone())) {
                 if (hasPassed) // ２連続パスすると終了
@@ -49,7 +51,7 @@ public class Main {
             }
 
             hasPassed = false;
-            Position p; 
+            Position p;
             if (turn == Turn.BLACK)
                 p = blackPlayer.play(board);
             else
@@ -58,7 +60,7 @@ public class Main {
             board.put(p.x, p.y, turn.stone());
             turn = turn.flip();
         }
-        
+
         System.out.printf("BLACK = %d\n", board.countStone(Stone.BLACK));
         System.out.printf("WHITE = %d\n", board.countStone(Stone.WHITE));
     }

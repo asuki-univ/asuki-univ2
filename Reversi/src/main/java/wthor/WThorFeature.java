@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import board.Board;
 import board.Stone;
 
-class WThorFeature {
+public class WThorFeature {
     ArrayList<Integer> featureIndices = new ArrayList<Integer>();
 
     public double calculateScore(WThorParams params) {
@@ -41,9 +41,9 @@ class WThorFeature {
             Stone[][] diags = new Stone[4][diagSize];
             for (int i = 0; i < diagSize; ++i) {
                 diags[0][i] = board.get(diagSize - i,     1 + i);
-                diags[1][i] = board.get(8 - diagSize + i, 1 + i);
+                diags[1][i] = board.get(9 - diagSize + i, 1 + i);
                 diags[2][i] = board.get(diagSize - i,     8 - i);
-                diags[3][i] = board.get(8 - diagSize + i, 8 - i);
+                diags[3][i] = board.get(9 - diagSize + i, 8 - i);
             }
 
             // TODO: We should have better solution here.
@@ -152,7 +152,7 @@ class WThorFeature {
         }
     }
 
-    private int index(Stone[] stones) {
+    public static int index(Stone[] stones) {
         int result = 0;
         for (int i = 0; i < stones.length; ++i)
             result = result * 3 + stones[i].ordinal();
@@ -160,7 +160,7 @@ class WThorFeature {
         return result;
     }
 
-    private int reverseIndex(Stone[] stones) {
+    public static int reverseIndex(Stone[] stones) {
         int result = 0;
         for (int i = stones.length - 1; i >= 0; --i)
             result = result * 3 + stones[i].ordinal();

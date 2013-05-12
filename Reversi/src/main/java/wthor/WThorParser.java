@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 class MatchData {
-    int theoreticalScore;   // 終盤39手目以降(多分)が最善と仮定した場合の理論スコア
+    public int theoreticalScore;   // 終盤39手目以降(多分)が最善と仮定した場合の理論スコア
     public int[] hands;
 
-    MatchData(int theoreticalScore, int[] hands) {
+    public MatchData(int theoreticalScore, int[] hands) {
         this.theoreticalScore = theoreticalScore;
         this.hands = hands;
     }
@@ -31,17 +31,18 @@ public class WThorParser {
     }
 
     private static int readHeader(InputStream in) throws IOException {
-        in.skip(4);
+        reallySkip(in, 4);
         int numMatches = readLittleEndianInt(in);
-        in.skip(8);
+        reallySkip(in, 8);
 
         return numMatches;
     }
 
     private static MatchData readMatchData(InputStream in) throws IOException {
-        in.skip(7);
+        reallySkip(in, 7);
 
-        int theoreticalScore = in.read();
+        int theoreticalBlackScore = in.read();
+        int theoreticalScore = (theoreticalBlackScore - 32) * 2;
 
         int[] hands = new int[60];
         for (int i = 0; i < 60; ++i) {
@@ -49,6 +50,13 @@ public class WThorParser {
         }
 
         return new MatchData(theoreticalScore, hands);
+    }
+
+    private static void reallySkip(InputStream in, long n) throws IOException {
+        while (n > 0) {
+            long skipped = in.skip(n);
+            n -= skipped;
+        }
     }
 
     private static int readLittleEndianInt(InputStream in) throws IOException {
