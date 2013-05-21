@@ -1,4 +1,4 @@
-package stringsearch;
+package stringsearch.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;

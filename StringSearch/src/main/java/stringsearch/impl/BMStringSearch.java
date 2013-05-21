@@ -1,15 +1,14 @@
-package stringsearch;
+package stringsearch.impl;
 
 import java.util.Arrays;
+
+import stringsearch.StringSearcher;
 
 public class BMStringSearch implements StringSearcher {
     final private int ALPHABETA_SIZE = 256;
 
     @Override
     public int search(String pattern, String text) {
-        if (pattern == null || "".equals(pattern))
-            throw new IllegalArgumentException();
-
         int[] delta1 = makeDelta1Table(pattern);
         int[] delta2 = makeDelta2Table(pattern);
 
@@ -20,7 +19,7 @@ public class BMStringSearch implements StringSearcher {
                     continue EXTERNAL;
                 }
             }
-            
+
             // 見つからなかった
             return i + 1;
         }
@@ -74,7 +73,7 @@ public class BMStringSearch implements StringSearcher {
     int suffixLength(String pattern, int pos) {
         for (int i = 0; pos - i >= 0; ++i) {
             if (pattern.charAt(pos - i) != pattern.charAt(pattern.length() - 1 - i))
-                return i; 
+                return i;
         }
         return pos;
     }

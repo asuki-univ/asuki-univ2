@@ -1,17 +1,16 @@
-package stringsearch;
+package stringsearch.impl;
+
+import stringsearch.StringSearcher;
 
 public class KMPStringSearch implements StringSearcher {
 
     @Override
     public int search(String pattern, String text) {
-        if (pattern == null || "".equals(pattern))
-            throw new IllegalArgumentException();
-        
         int[] table = makeTable(pattern);
-        
+
         int i = 0;
         int m = 0;
-        
+
         while (i + m < text.length()) {
             if (pattern.charAt(m) == text.charAt(i + m)) {
                 m = m + 1;
@@ -23,33 +22,34 @@ public class KMPStringSearch implements StringSearcher {
                     m = table[m];
             }
         }
-        
-        // We couldn't find the |pattern| in text.
+
+        // 見つからなかった
         return text.length();
     }
-    
-    private int[] makeTable(String w) {
-        int[] T = new int[w.length() + 1];
-        
-        int i = 2;
-        int j = 0;
-        
+
+    static int[] makeTable(String pattern) {
+        assert(pattern.length() >= 1);
+
+        if (pattern.length() <= 1)
+            return new int[] { -1 };
+
+        int[] T = new int[pattern.length()];
         T[0] = -1;
         T[1] = 0;
-        
-        while (i < w.length()) {
-            if (w.charAt(i - 1) == w.charAt(j)) {
-                T[i] = j + 1;
-                i = i + 1;
-                j = j + 1;
-            } else if (j > 0) {
-                j = T[j];
+
+        int m = 2;
+        int k = 0; // k 文字目まで接頭辞
+
+        while (m < pattern.length()) {
+            if (pattern.charAt(m - 1) == pattern.charAt(k)) {
+                T[m++] = ++k;
+            } else if (k > 0) {
+                k = T[k];
             } else {
-                T[i] = 0;
-                i = i + 1;
+                T[m++] = 0;
             }
         }
-        
+
         return T;
     }
 }

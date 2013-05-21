@@ -110,10 +110,10 @@ public class WThorLearner {
             }
 
             board.put(x, y, currentTurn.stone());
-//            if (currentTurn.equals(Turn.WHITE)) {
-//                currentTurn = currentTurn.flip();
-//                continue;
-//            }
+            if (currentTurn.equals(Turn.BLACK)) {
+                currentTurn = currentTurn.flip();
+                continue;
+            }
 
             WThorFeature feature = new WThorFeature();
             feature.collect(board);

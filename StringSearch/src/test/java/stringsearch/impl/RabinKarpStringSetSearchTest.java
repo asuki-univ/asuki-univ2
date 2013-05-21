@@ -1,4 +1,4 @@
-package stringsearch;
+package stringsearch.impl;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Test;
+
+import stringsearch.impl.RabinKarpStringSetSearch;
 
 public class RabinKarpStringSetSearchTest {
     protected RabinKarpStringSetSearch seracher() {
