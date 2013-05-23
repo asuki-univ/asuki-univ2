@@ -3,14 +3,14 @@ package player.ai;
 import board.Position;
 
 public class EvalResult {
-    private int score;
+    private double score;
     private Position position;
-    
-    EvalResult(int score, Position position) {
+
+    public EvalResult(double score, Position position) {
         this.score = score;
         this.position = position;
     }
-    
+
     public Position getPosition() { return position; }
-    public int getScore() { return score; }
+    public double getScore() { return score; }
 }

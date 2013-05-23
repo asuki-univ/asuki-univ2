@@ -28,7 +28,7 @@ public class TranpositionMoveOrderingSimpleAI extends Player {
     private final int maxDepth;
 
     public TranpositionMoveOrderingSimpleAI(Turn turn, int maxDepth) {
-        super(turn);        
+        super(turn);
         this.maxDepth = maxDepth;
     }
 
@@ -36,12 +36,12 @@ public class TranpositionMoveOrderingSimpleAI extends Player {
     public Position play(Board board) {
         List<Position> ps = findPuttableHands(board, turn.stone());
         ps = doMoveOrdering(board, ps);
-        
+
         return eval(board, maxDepth, 5, turn.stone(), ps,
                 new HashMap<TranpositionTableKey, TranpositionTableValue>(),
                 new BoardScoreEvaluation(turn), Integer.MIN_VALUE, Integer.MAX_VALUE).getPosition();
     }
-    
+
     protected List<Position> doMoveOrdering(Board board, List<Position> ps) {
         List<EvalResult> shallowEvaluation = new ArrayList<EvalResult>();
         for (Position p : ps) {
@@ -49,31 +49,31 @@ public class TranpositionMoveOrderingSimpleAI extends Player {
             Evaluation e = new BoardScoreEvaluation(turn);
             e.willPut(board, p.x, p.y, turn.stone());
             b.put(p.x, p.y, turn.stone());
-            
+
             EvalResult er = eval(b, 2, -1, turn.stone().flip(),
                     findPuttableHands(board, turn.stone().flip()),
                     new HashMap<TranpositionTableKey, TranpositionTableValue>(), e, -10000, 10000);
             shallowEvaluation.add(new EvalResult(-er.getScore(), p));
         }
-        
+
         // スコアの大きい方から並べる。
         Collections.sort(shallowEvaluation, new HandComparator());
-        
+
         List<Position> result = new ArrayList<Position>();
         for (EvalResult er : shallowEvaluation)
             result.add(er.getPosition());
         return result;
     }
-    
+
     protected EvalResult eval(Board board, int restDepth, int restTranpositionDepth, Stone stone,
             List<Position> puttablePositions,
-            Map<TranpositionTableKey, TranpositionTableValue> tranpositionTable, Evaluation evaluation, int alpha, int beta) {
+            Map<TranpositionTableKey, TranpositionTableValue> tranpositionTable, Evaluation evaluation, double alpha, double beta) {
         if (restDepth == 0)
             return new EvalResult(evaluation.score(board, stone), null);
-        
+
         TranpositionTableKey key = new TranpositionTableKey(restTranpositionDepth, board);
-        int lower = Integer.MIN_VALUE;
-        int upper = Integer.MAX_VALUE;
+        double lower = Double.NEGATIVE_INFINITY;
+        double upper = Double.POSITIVE_INFINITY;
         if (restTranpositionDepth >= 0 && tranpositionTable.containsKey(key)) {
             TranpositionTableValue v = tranpositionTable.get(key);
             lower = v.lower;
@@ -88,20 +88,20 @@ public class TranpositionMoveOrderingSimpleAI extends Player {
 
         // 自分の番では、評価が最も大きくなるものを選ぶ。
         boolean didPlayed = false;
-        int maxScore = -10000;
+        double maxScore = -10000;
         Position maxScorePosition = null;
-        
-        for (Position p : puttablePositions) { 
-            int x = p.x, y = p.y; 
+
+        for (Position p : puttablePositions) {
+            int x = p.x, y = p.y;
             didPlayed = true;
             Board b = new Board(board);
             Evaluation e = evaluation.clone();
             e.willPut(b, x, y, stone);
             b.put(x, y, stone);
 
-            int a = Math.max(alpha, maxScore);
+            double a = Math.max(alpha, maxScore);
             List<Position> nextPuttablePositions = findPuttableHands(b, stone.flip());
-            int score = -eval(b, restDepth - 1, restTranpositionDepth - 1, stone.flip(), nextPuttablePositions, tranpositionTable, e, -(a+1), -a).getScore();
+            double score = -eval(b, restDepth - 1, restTranpositionDepth - 1, stone.flip(), nextPuttablePositions, tranpositionTable, e, -(a+1), -a).getScore();
             if (a < score && score < beta) {
                 e = evaluation.clone();
                 e.willPut(board, x, y, stone);
@@ -120,19 +120,19 @@ public class TranpositionMoveOrderingSimpleAI extends Player {
 
         if (didPlayed) {
             assert (maxScorePosition != null);
-            
+
             if (restTranpositionDepth >= 0) {
                 if (maxScore <= alpha)
                     tranpositionTable.put(key,  new TranpositionTableValue(lower, maxScore, maxScorePosition));
                 else if (beta <= maxScore)
-                    tranpositionTable.put(key,  new TranpositionTableValue(maxScore, upper, maxScorePosition));                
+                    tranpositionTable.put(key,  new TranpositionTableValue(maxScore, upper, maxScorePosition));
                 else
                     tranpositionTable.put(key,  new TranpositionTableValue(maxScore, maxScore, maxScorePosition));
             }
 
             return new EvalResult(maxScore, maxScorePosition);
         } else {
-            int score = -eval(board, restDepth - 1, restTranpositionDepth - 1, stone.flip(), findPuttableHands(board, stone.flip()), tranpositionTable, evaluation, -beta, -alpha).getScore();
+            double score = -eval(board, restDepth - 1, restTranpositionDepth - 1, stone.flip(), findPuttableHands(board, stone.flip()), tranpositionTable, evaluation, -beta, -alpha).getScore();
             return new EvalResult(score, null);
         }
     }

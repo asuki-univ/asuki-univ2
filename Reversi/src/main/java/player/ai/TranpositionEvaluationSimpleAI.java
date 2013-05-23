@@ -40,11 +40,11 @@ class TranpositionTableKey {
 }
 
 class TranpositionTableValue {
-    public final int lower;
-    public final int upper;
+    public final double lower;
+    public final double upper;
     public final Position position;
 
-    public TranpositionTableValue(int lower, int upper, Position position) {
+    public TranpositionTableValue(double lower, double upper, Position position) {
         this.lower = lower;
         this.upper = upper;
         this.position = position;
@@ -67,13 +67,13 @@ public class TranpositionEvaluationSimpleAI extends Player {
     }
 
     protected EvalResult eval(Board board, int restDepth, int restTranpositionDepth, Stone stone,
-            Map<TranpositionTableKey, TranpositionTableValue> tranpositionTable, Evaluation evaluation, int alpha, int beta) {
+            Map<TranpositionTableKey, TranpositionTableValue> tranpositionTable, Evaluation evaluation, double alpha, double beta) {
         if (restDepth == 0)
             return new EvalResult(evaluation.score(board, stone), null);
 
         TranpositionTableKey key = new TranpositionTableKey(restTranpositionDepth, board);
-        int lower = Integer.MIN_VALUE;
-        int upper = Integer.MAX_VALUE;
+        double lower = Double.NEGATIVE_INFINITY;
+        double upper = Double.POSITIVE_INFINITY;
         if (restTranpositionDepth >= 0 && tranpositionTable.containsKey(key)) {
             TranpositionTableValue v = tranpositionTable.get(key);
             lower = v.lower;
@@ -88,7 +88,7 @@ public class TranpositionEvaluationSimpleAI extends Player {
 
         // 自分の番では、評価が最も大きくなるものを選ぶ。
         boolean didPlayed = false;
-        int maxScore = -10000;
+        double maxScore = -10000;
         Position p = null;
         EXTERNAL_LOOP: for (int y = 1; y <= Board.HEIGHT; ++y) {
             for (int x = 1; x <= Board.WIDTH; ++x) {
@@ -100,8 +100,8 @@ public class TranpositionEvaluationSimpleAI extends Player {
                 e.willPut(b, x, y, stone);
                 b.put(x, y, stone);
 
-                int a = Math.max(alpha, maxScore);
-                int score = -eval(b, restDepth - 1, restTranpositionDepth - 1, stone.flip(), tranpositionTable, e, -(a+1), -a).getScore();
+                double a = Math.max(alpha, maxScore);
+                double score = -eval(b, restDepth - 1, restTranpositionDepth - 1, stone.flip(), tranpositionTable, e, -(a+1), -a).getScore();
                 if (a < score && score < beta) {
                     e = evaluation.clone();
                     e.willPut(board, x, y, stone);
@@ -133,7 +133,7 @@ public class TranpositionEvaluationSimpleAI extends Player {
 
             return new EvalResult(maxScore, p);
         } else {
-            int score = -eval(board, restDepth - 1, restTranpositionDepth - 1, stone.flip(), tranpositionTable, evaluation, -beta, -alpha).getScore();
+            double score = -eval(board, restDepth - 1, restTranpositionDepth - 1, stone.flip(), tranpositionTable, evaluation, -beta, -alpha).getScore();
             return new EvalResult(score, null);
         }
     }

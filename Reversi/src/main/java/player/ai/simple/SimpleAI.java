@@ -1,6 +1,7 @@
-package player.ai;
+package player.ai.simple;
 
 import player.Player;
+import player.ai.EvalResult;
 import board.Board;
 import board.Position;
 import board.Turn;

@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import player.Player;
-import player.ai.SimpleAI;
+import player.ai.simple.SimpleAI;
 
 import board.Board;
 import board.Position;
