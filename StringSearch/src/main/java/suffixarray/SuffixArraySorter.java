@@ -1,5 +1,5 @@
 package suffixarray;
 
 public interface SuffixArraySorter {
-    public void apply(String[] ss);
+    public void apply(SuffixArrayItem[] items);
 }

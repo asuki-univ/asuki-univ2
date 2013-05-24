@@ -1,21 +1,34 @@
 package suffixarray;
 
-public class SuffixArray {
-    private final String[] suffixes;
+public abstract class SuffixArray {
+    protected final SuffixArrayItem[] data;
 
-    public SuffixArray(String text, SuffixArraySorter sorter) {
-        suffixes = new String[text.length()];
-        for (int i = 0; i < text.length(); ++i)
-            suffixes[i] = text.substring(i);
+    public class SuffixArrayRange {
+        public int beginIndex;
+        public int endIndex;
 
-        sorter.apply(suffixes);
+        public SuffixArrayRange(int beginIndex, int endIndex) {
+            this.beginIndex = beginIndex;
+            this.endIndex = endIndex;
+        }
     }
+
+    public SuffixArray(String text) {
+        data = new SuffixArrayItem[text.length()];
+        for (int i = 0; i < text.length(); ++i)
+            data[i] = new SuffixArrayItem(i, text.substring(i));
+
+        sort();
+    }
+
+    public abstract SuffixArrayRange find(String s);
+    protected abstract void sort();
 
     public int size() {
-        return suffixes.length;
+        return data.length;
     }
 
-    public String get(int ith) {
-        return suffixes[ith];
+    public SuffixArrayItem get(int ith) {
+        return data[ith];
     }
 }

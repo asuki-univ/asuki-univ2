@@ -25,6 +25,10 @@ public class KMPStringSearchTest extends AbstractStringSearchTest {
                 -1, 0, 0, 1, 2, 3, 1, 2
         }));
 
+        Assert.assertThat(KMPStringSearch.makeTable("ABABABAAB"), equalTo(new int[] {
+                -1, 0, 0, 1, 2, 3, 4, 5, 1
+        }));
+
         Assert.assertThat(KMPStringSearch.makeTable("AABAABAABC"), equalTo(new int[] {
                 -1, 0, 1, 0, 1, 2, 3, 4, 5, 6
         }));

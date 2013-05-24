@@ -1,6 +1,5 @@
 package suffixarray.impl;
 
-import suffixarray.SimpleSuffixArray;
 import suffixarray.SuffixArray;
 import suffixarray.SuffixArrayTest;
 
