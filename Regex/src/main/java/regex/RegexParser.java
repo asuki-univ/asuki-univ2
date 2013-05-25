@@ -1,118 +1,13 @@
 package regex;
 
-abstract class RENode {
-    abstract NFA createAutomata();
-}
+import regex.term.RegexTermOptional;
+import regex.term.RegexTermSelection;
+import regex.term.RegexTermSequence;
+import regex.term.RegexTermStar;
+import regex.term.RegexTermCharacter;
+import regex.term.RegexTerm;
 
-class RECharacter extends RENode {
-    private char c;
 
-    public RECharacter(char c) {
-        this.c = c;
-    }
-
-    @Override
-    NFA createAutomata() {
-        NFANode beginNode = new NFANode(false);
-        NFANode endNode = new NFANode(true);
-        beginNode.addEdge(endNode, Label.newCharLabel(c));
-
-        return new NFA(beginNode, endNode);
-    }
-}
-
-class REStar extends RENode {
-    private RENode node;
-
-    public REStar(RENode node) {
-        this.node = node;
-    }
-
-    @Override
-    NFA createAutomata() {
-        NFA am = node.createAutomata();
-        am.getBeginNode().addEdge(am.getEndNode(), Label.newEmptyLabel());
-        am.getEndNode().addEdge(am.getBeginNode(), Label.newEmptyLabel());
-
-        return am;
-    }
-}
-
-class REOptional extends RENode {
-    private RENode node;
-
-    public REOptional(RENode node) {
-        this.node = node;
-    }
-
-    @Override
-    NFA createAutomata() {
-        NFA am = node.createAutomata();
-        am.getBeginNode().addEdge(am.getEndNode(), Label.newEmptyLabel());
-        return am;
-    }
-}
-
-class RESequence extends RENode {
-    private RENode r1;
-    private RENode r2;
-
-    public RESequence(RENode r1, RENode r2) {
-        this.r1 = r1;
-        this.r2 = r2;
-    }
-
-    @Override
-    NFA createAutomata() {
-        NFA am1 = r1.createAutomata();
-        NFA am2 = r2.createAutomata();
-
-        am1.getEndNode().setFinal(false);
-        am1.getEndNode().addEdge(am2.getBeginNode(), Label.newEmptyLabel());
-
-        return new NFA(am1.getBeginNode(), am2.getEndNode());
-    }
-}
-
-class RESelection extends RENode {
-    private RENode r1;
-    private RENode r2;
-
-    public RESelection(RENode r1, RENode r2) {
-        this.r1 = r1;
-        this.r2 = r2;
-    }
-
-    @Override
-    NFA createAutomata() {
-        NFA am1 = r1.createAutomata();
-        NFA am2 = r2.createAutomata();
-
-        NFANode beginNode = new NFANode(false);
-        NFANode endNode = new NFANode(true);
-
-        am1.getEndNode().setFinal(false);
-        am2.getEndNode().setFinal(false);
-        beginNode.addEdge(am1.getBeginNode(), Label.newEmptyLabel());
-        beginNode.addEdge(am2.getBeginNode(), Label.newEmptyLabel());
-        am1.getEndNode().addEdge(endNode, Label.newEmptyLabel());
-        am2.getEndNode().addEdge(endNode, Label.newEmptyLabel());
-
-        return new NFA(beginNode, endNode);
-    }
-}
-
-// (), *, ?, | のみを受け取る。英字のみを考慮する
-// simple ::= ( r )
-//         |  alpha
-// c1     ::= simple ?
-//         |  simple *
-//         |  simple
-// c2     ::= c1 r
-//         |  c1
-// r      ::= c1 | r
-//         |  c2
-//
 public class RegexParser {
     private static final char[] META_CHARACTERS = new char[] {
         '(', ')', '*', '?', '|'
@@ -135,67 +30,67 @@ public class RegexParser {
         return false;
     }
 
-    public RENode parse() {
-        RENode node = parseRegex();
+    public RegexTerm parse() {
+        RegexTerm node = parseRegex();
         if (pos != regex.length())
             return null;
 
         return node;
     }
 
-    private RENode parseRegex() {
+    private RegexTerm parseRegex() {
         if (regex.length() <= pos)
             return null;
 
-        RENode r1 = parseSeq();
+        RegexTerm r1 = parseSeq();
         if (regex.length() <= pos || regex.charAt(pos) != '|')
             return r1;
 
         ++pos;
-        RENode r2 = parseRegex();
-        return new RESelection(r1, r2);
+        RegexTerm r2 = parseRegex();
+        return new RegexTermSelection(r1, r2);
     }
 
-    private RENode parseSeq() {
+    private RegexTerm parseSeq() {
         if (regex.length() <= pos)
             return null;
 
-        RENode r1 = parseAdditional();
+        RegexTerm r1 = parseAdditional();
         if (r1 == null)
             return null;
 
-        RENode r2 = parseSeq();
+        RegexTerm r2 = parseSeq();
         if (r2 == null)
             return r1;
-        return new RESequence(r1, r2);
+        return new RegexTermSequence(r1, r2);
     }
 
-    private RENode parseAdditional() {
+    private RegexTerm parseAdditional() {
         if (regex.length() <= pos)
             return null;
 
-        RENode simple = parseSimple();
+        RegexTerm simple = parseSimple();
         if (regex.length() <= pos)
             return simple;
         if (regex.charAt(pos) == '?') {
             ++pos;
-            return new REOptional(simple);
+            return new RegexTermOptional(simple);
         } else if (regex.charAt(pos) == '*') {
             ++pos;
-            return new REStar(simple);
+            return new RegexTermStar(simple);
         } else {
             return simple;
         }
     }
 
-    private RENode parseSimple() {
+    private RegexTerm parseSimple() {
         if (regex.length() <= pos)
             return null;
 
         char c = regex.charAt(pos);
         if (c == '(') {
             ++pos;
-            RENode node = parseRegex();
+            RegexTerm node = parseRegex();
             if (node == null)
                 throw new IllegalArgumentException();
             if (regex.charAt(pos++) != ')')
@@ -205,7 +100,7 @@ public class RegexParser {
             return null;
         } else {
             ++pos;
-            return new RECharacter(c);
+            return new RegexTermCharacter(c);
         }
     }
 }

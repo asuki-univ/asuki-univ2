@@ -5,13 +5,19 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+import automata.DFA;
+import automata.NFA;
+import automata.NFABuilder;
+
+
+import regex.RegexParser;
+
 public class MinimizedDFATest extends AutomataTest {
     public boolean accepts(String regex, String s) {
-        return new RegexParser(regex).parse().createAutomata().convertToDFA().minimizeDFA().accepts(s);
-    }
-
-    private DFA makeDFA(String regex) {
-        return new RegexParser(regex).parse().createAutomata().convertToDFA().minimizeDFA();
+        NFA nfa = new NFABuilder().build(new RegexParser(regex).parse());
+        DFA dfa = nfa.convertToDFA();
+        DFA minimized = dfa.minimizeDFA();
+        return minimized.accepts(s);
     }
 
     @Test
@@ -21,5 +27,12 @@ public class MinimizedDFATest extends AutomataTest {
         assertThat(makeDFA("a*").getNodeSize(), is(1));
         assertThat(makeDFA("aa*").getNodeSize(), is(2));
         assertThat(makeDFA("a*b").getNodeSize(), is(2));
+    }
+
+    private static DFA makeDFA(String regex) {
+        NFA nfa = new NFABuilder().build(new RegexParser(regex).parse());
+        DFA dfa = nfa.convertToDFA();
+        DFA minimized = dfa.minimizeDFA();
+        return minimized;
     }
 }

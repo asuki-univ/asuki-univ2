@@ -1,13 +1,13 @@
-package regex;
+package automata;
 
 public class Label {
     private char c;
 
-    static Label newEmptyLabel() {
+    static public Label newEmptyLabel() {
         return new Label('\0');
     }
 
-    static Label newCharLabel(char c) {
+    static public Label newCharLabel(char c) {
         return new Label(c);
     }
 

@@ -1,59 +1,12 @@
-package regex;
+package automata;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
-
-class NFANode {
-    private List<NFAEdge> edges;
-    private boolean isFinal;
-
-    public NFANode(boolean isFinal) {
-        this.edges = new ArrayList<NFAEdge>();
-        this.isFinal = isFinal;
-    }
-
-    public boolean isFinal() {
-        return isFinal;
-    }
-
-    public void setFinal(boolean flag) {
-        this.isFinal = flag;
-    }
-
-    public void addEdge(NFANode node, Label label) {
-        edges.add(new NFAEdge(node, label));
-    }
-
-    public List<NFAEdge> getEdges() {
-        return Collections.unmodifiableList(edges);
-    }
-}
-
-class NFAEdge {
-    private NFANode dest;
-    private Label label;
-
-    public NFAEdge(NFANode dest, Label label) {
-        this.dest = dest;
-        this.label = label;
-    }
-
-    public NFANode getDestination() {
-        return dest;
-    }
-
-    public Label getLabel() {
-        return label;
-    }
-}
 
 public class NFA {
     private NFANode beginNode;
