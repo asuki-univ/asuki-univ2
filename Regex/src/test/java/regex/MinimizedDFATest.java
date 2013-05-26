@@ -6,7 +6,9 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import automata.DFA;
+import automata.DFAMinimizer;
 import automata.NFA;
+import automata.NFAConverter;
 import automata.NFABuilder;
 
 
@@ -15,8 +17,8 @@ import regex.RegexParser;
 public class MinimizedDFATest extends AutomataTest {
     public boolean accepts(String regex, String s) {
         NFA nfa = new NFABuilder().build(new RegexParser(regex).parse());
-        DFA dfa = nfa.convertToDFA();
-        DFA minimized = dfa.minimizeDFA();
+        DFA dfa = NFAConverter.convert(nfa);
+        DFA minimized = DFAMinimizer.minimize(dfa);
         return minimized.accepts(s);
     }
 
@@ -31,8 +33,8 @@ public class MinimizedDFATest extends AutomataTest {
 
     private static DFA makeDFA(String regex) {
         NFA nfa = new NFABuilder().build(new RegexParser(regex).parse());
-        DFA dfa = nfa.convertToDFA();
-        DFA minimized = dfa.minimizeDFA();
+        DFA dfa = NFAConverter.convert(nfa);
+        DFA minimized = DFAMinimizer.minimize(dfa);
         return minimized;
     }
 }
