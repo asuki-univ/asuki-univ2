@@ -2,7 +2,7 @@ package automata;
 
 import regex.term.RegexTermCharacter;
 import regex.term.RegexTerm;
-import regex.term.RegexTermOptional;
+import regex.term.RegexTermOption;
 import regex.term.RegexTermSelection;
 import regex.term.RegexTermSequence;
 import regex.term.RegexTermStar;
@@ -12,8 +12,8 @@ public class NFABuilder {
         switch (term.getType()) {
         case CHAR:
             return buildFromChar((RegexTermCharacter) term);
-        case OPTIONAL:
-            return buildFromOptional((RegexTermOptional) term);
+        case OPTION:
+            return buildFromOption((RegexTermOption) term);
         case SELECTION:
             return buildFromSelection((RegexTermSelection) term);
         case SEQUENCE:
@@ -34,7 +34,7 @@ public class NFABuilder {
         return new NFA(beginNode, endNode);
     }
 
-    public NFA buildFromOptional(RegexTermOptional term) {
+    public NFA buildFromOption(RegexTermOption term) {
         NFA am = build(term.getTerm());
         am.getBeginNode().addEdge(am.getEndNode(), Label.newEmptyLabel());
         return am;

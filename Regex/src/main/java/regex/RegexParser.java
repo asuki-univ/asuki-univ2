@@ -1,17 +1,14 @@
 package regex;
 
-import regex.term.RegexTermOptional;
+import regex.term.RegexTermOption;
 import regex.term.RegexTermSelection;
 import regex.term.RegexTermSequence;
 import regex.term.RegexTermStar;
 import regex.term.RegexTermCharacter;
 import regex.term.RegexTerm;
 
-
 public class RegexParser {
-    private static final char[] META_CHARACTERS = new char[] {
-        '(', ')', '*', '?', '|'
-    };
+    class ParseException extends Exception {}
 
     private String regex;
     private int pos;
@@ -21,69 +18,80 @@ public class RegexParser {
         this.pos = 0;
     }
 
-    private static boolean isMetaCharacter(char c) {
-        for (char meta : META_CHARACTERS) {
-            if (c == meta)
-                return true;
-        }
-
-        return false;
+    private static boolean isAlnum(char c) {
+        return ('0' <= c && c <= '9') || ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
     }
 
     public RegexTerm parse() {
-        RegexTerm node = parseRegex();
-        if (pos != regex.length())
-            return null;
+        pos = 0;
 
-        return node;
+        try {
+            RegexTerm term = parseRegex();
+            if (pos != regex.length())
+                return null;
+            return term;
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
-    private RegexTerm parseRegex() {
+    private RegexTerm parseRegex() throws ParseException {
         if (regex.length() <= pos)
             return null;
 
-        RegexTerm r1 = parseSeq();
+        RegexTerm leftTerm = parseSeq();
+        if (leftTerm == null)
+            return null;
         if (regex.length() <= pos || regex.charAt(pos) != '|')
-            return r1;
+            return leftTerm;
 
         ++pos;
-        RegexTerm r2 = parseRegex();
-        return new RegexTermSelection(r1, r2);
+        RegexTerm rightTerm = parseRegex();
+        if (rightTerm == null)
+            return null;
+        return new RegexTermSelection(leftTerm, rightTerm);
     }
 
-    private RegexTerm parseSeq() {
+    private RegexTerm parseSeq() throws ParseException {
         if (regex.length() <= pos)
             return null;
 
-        RegexTerm r1 = parseAdditional();
-        if (r1 == null)
+        RegexTerm leftTerm = parseAdditional();
+        if (leftTerm == null)
             return null;
 
-        RegexTerm r2 = parseSeq();
-        if (r2 == null)
-            return r1;
-        return new RegexTermSequence(r1, r2);
+        RegexTerm rightTerm = parseSeq();
+        if (rightTerm == null)
+            return leftTerm;
+
+        return new RegexTermSequence(leftTerm, rightTerm);
     }
 
-    private RegexTerm parseAdditional() {
+    private RegexTerm parseAdditional() throws ParseException {
         if (regex.length() <= pos)
             return null;
 
         RegexTerm simple = parseSimple();
+        if (simple == null)
+            return null;
+
         if (regex.length() <= pos)
             return simple;
-        if (regex.charAt(pos) == '?') {
+
+        char c = regex.charAt(pos);
+        switch (c) {
+        case '?':
             ++pos;
-            return new RegexTermOptional(simple);
-        } else if (regex.charAt(pos) == '*') {
+            return new RegexTermOption(simple);
+        case '*':
             ++pos;
             return new RegexTermStar(simple);
-        } else {
+        default:
             return simple;
         }
     }
 
-    private RegexTerm parseSimple() {
+    private RegexTerm parseSimple() throws ParseException {
         if (regex.length() <= pos)
             return null;
 
@@ -92,15 +100,15 @@ public class RegexParser {
             ++pos;
             RegexTerm node = parseRegex();
             if (node == null)
-                throw new IllegalArgumentException();
+                throw new ParseException();
             if (regex.charAt(pos++) != ')')
-                throw new IllegalArgumentException();
+                throw new ParseException();
             return node;
-        } else if (isMetaCharacter(c)) {
-            return null;
-        } else {
+        } if (isAlnum(c)) {
             ++pos;
             return new RegexTermCharacter(c);
+        } else {
+            return null;
         }
     }
 }

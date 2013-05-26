@@ -4,7 +4,7 @@ package regex.term;
 public abstract class RegexTerm {
     public enum TermType {
         CHAR,
-        OPTIONAL,
+        OPTION,
         SELECTION,
         SEQUENCE,
         STAR
