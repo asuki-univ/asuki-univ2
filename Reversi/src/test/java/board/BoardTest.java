@@ -9,10 +9,10 @@ public class BoardTest {
 
     @Test
     public void testPut1() {
-        Board board = new Board(
+        Board board = new BoardParser().parse(
                 "W..W..W." +
                 ".B.B.B.." +
-                "..BBB..." +    
+                "..BBB..." +
                 "WBB.BBBW" +
                 "..BBB..." +
                 ".B.B.B.." +
@@ -21,7 +21,7 @@ public class BoardTest {
 
         board.put(4, 4, Stone.WHITE);
 
-        Board after = new Board(
+        Board after = new BoardParser().parse(
                 "W..W..W." +
                 ".W.W.W.." +
                 "..WWW..." +
@@ -36,7 +36,7 @@ public class BoardTest {
 
     @Test
     public void testPut2() {
-        Board board = new Board(
+        Board board = new BoardParser().parse(
                 "B..B..B." +
                 ".B.B.B.." +
                 "..BBB..." +
@@ -48,7 +48,7 @@ public class BoardTest {
 
         board.put(4, 4, Stone.WHITE);
 
-        Board after = new Board(
+        Board after = new BoardParser().parse(
                 "B..B..B." +
                 ".B.B.B.." +
                 "..BBB..." +

@@ -5,13 +5,14 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import board.Board;
+import board.BoardParser;
 import board.Stone;
 
 public class WThorFeatureTest {
 
     @Test
     public void testCollectFeature1() {
-        Board board = new Board(
+        Board board = new BoardParser().parse(
                 "WWW.B..." +
                 "...B...." +
                 "..B.B..." +

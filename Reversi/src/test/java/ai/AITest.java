@@ -13,23 +13,24 @@ import player.ai.NegaMaxSimpleAI;
 import player.ai.NegaScoutEvaluationSimpleAI;
 import player.ai.TranpositionEvaluationSimpleAI;
 import board.Board;
+import board.BoardParser;
 import board.Position;
 import board.Turn;
 
 public class AITest {
     @Test
     public void testEvalEquality() {
-        Board board = new Board(
-                "........" + 
-                "..WBB..." + 
-                "..WWBW.." + 
-                "..WBBB.." + 
-                "..WBB..." + 
-                "...B...." + 
-                "........" + 
+        Board board = new BoardParser().parse(
+                "........" +
+                "..WBB..." +
+                "..WWBW.." +
+                "..WBBB.." +
+                "..WBB..." +
+                "...B...." +
+                "........" +
                 "........");
 
-        // MinMax, NegaMax, AlphaBeta should return the same evaluation. 
+        // MinMax, NegaMax, AlphaBeta should return the same evaluation.
         // Move Ordering might return the same evaluation hand, but it might be the different one.
         Player minmax = new MinMaxSimpleAI(Turn.WHITE, 5);
         Player negamax = new NegaMaxSimpleAI(Turn.WHITE, 5);
@@ -37,7 +38,7 @@ public class AITest {
         Player alphabeta2 = new AlphaBetaEvaluationSimpleAI(Turn.WHITE, 5);
         Player negascout = new NegaScoutEvaluationSimpleAI(Turn.WHITE, 5);
         Player tranposition = new TranpositionEvaluationSimpleAI(Turn.WHITE, 5);
-        
+
         Position p1 = minmax.play(board);
         Position p2 = negamax.play(board);
         Position p3 = alphabeta.play(board);

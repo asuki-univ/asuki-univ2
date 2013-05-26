@@ -35,21 +35,6 @@ public class Board {
                 this.board[y][x] = board.board[y][x];
     }
 
-    // これは単にめんどくさいので追加しただけ。あとで取る
-    public Board(String str) {
-        this();
-
-        for (int i = 0; i < 64; ++i) {
-            int x = i % 8 + 1;
-            int y = i / 8 + 1;
-
-            if (str.charAt(i) == 'B')
-                board[y][x] = Stone.BLACK;
-            else if (str.charAt(i) == 'W')
-                board[y][x] = Stone.WHITE;
-        }
-    }
-
     public boolean isPuttableSomewhere(Stone stone) {
         for (int y = 1; y <= HEIGHT; ++y) {
             for (int x = 1; x <= WIDTH; ++x) {
@@ -202,6 +187,10 @@ public class Board {
 
     public Stone get(int x, int y) {
         return board[y][x];
+    }
+
+    public void set(int x, int y, Stone stone) {
+        board[y][x] = stone;
     }
 
     public Stone[] getHorizontal(int y) {
