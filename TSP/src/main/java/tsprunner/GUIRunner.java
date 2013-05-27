@@ -8,6 +8,7 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import tsp.AbstractTSPSolver;
@@ -82,32 +83,32 @@ public class GUIRunner extends AbstractRunner {
         final List<Point> points = loadProblem("problem/att48.tsp");
 
         // opt = 33523.70850743559
-//        int[] optIndices = new int[] {
-//                 1,  8, 38, 31, 44, 18,  7, 28,  6, 37,
-//                19, 27, 17, 43, 30, 36, 46, 33, 20, 47,
-//                21, 32, 39, 48,  5, 42, 24, 10, 45, 35,
-//                 4, 26,  2, 29, 34, 41, 16, 22,  3, 23,
-//                14, 25, 13, 11, 12, 15, 40, 9
-//        };
-//
-//        List<Point> optPoints = new ArrayList<Point>();
-//        for (int k : optIndices) {
-//            optPoints.add(points.get(k - 1));
-//        }
-//
-//        AbstractTSPSolver solver = new HillClimbingImproved(optPoints);
+        int[] optIndices = new int[] {
+                 1,  8, 38, 31, 44, 18,  7, 28,  6, 37,
+                19, 27, 17, 43, 30, 36, 46, 33, 20, 47,
+                21, 32, 39, 48,  5, 42, 24, 10, 45, 35,
+                 4, 26,  2, 29, 34, 41, 16, 22,  3, 23,
+                14, 25, 13, 11, 12, 15, 40, 9
+        };
+
+        List<Point> optPoints = new ArrayList<Point>();
+        for (int k : optIndices) {
+            optPoints.add(points.get(k - 1));
+        }
+
+        // AbstractTSPSolver solver = new HillClimbingImproved(optPoints);
 
         // AbstractTSPSolver solver = new GA(points);
-        AbstractTSPSolver solver = new HillClimbing(points);
+        //AbstractTSPSolver solver = new HillClimbing(points);
         // AbstractTSPSolver solver = new HillClimbingWithRandom(points);
 
         // 34052.487524201075
         // AbstractTSPSolver solver = new HillClimbingImproved(points);
 
         // AbstractTSPSolver solver = new SimulatedAnnealing(points);
-        // TSPSolver solver = new SimulatedAnnealingImproved(points);
+        TSPSolver solver = new SimulatedAnnealingImproved(points);
         //TSPSolver solver = new KOptHillClimbing(points, 2);
-        //TSPSolver solver = new KOptHillClimbing(points, 3);
+        // TSPSolver solver = new KOptHillClimbing(points, 3);
         //TSPSolver solver = new KOptHillClimbing(points, 4);
         //TSPSolver solver = new KOptHillClimbing(points, 5);
 

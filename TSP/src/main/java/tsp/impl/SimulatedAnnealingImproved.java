@@ -30,7 +30,7 @@ public class SimulatedAnnealingImproved extends HillClimbingImproved {
         if (currentTemperature < 1) {
             currentTemperature = 0;
         } else {
-            currentTemperature *= 0.998;
+            currentTemperature *= 0.9992;
         }
 
         System.out.printf("Current temp = %f\n", currentTemperature);
