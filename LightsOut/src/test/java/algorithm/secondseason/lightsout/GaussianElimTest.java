@@ -1,4 +1,4 @@
-package algorithm.ss;
+package algorithm.secondseason.lightsout;
 
 import static org.junit.Assert.assertTrue;
 
