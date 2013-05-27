@@ -15,7 +15,7 @@ public class BitDPSolver {
     }
 
     public double solve() {
-        // dp[x][bits] を、0 から x への経路で、bits を全て通る最短路とする。(x は bits に含む)
+        // dp[x][bits] を、0 から x への経路で、bits を全て通る最短路とする。(x は bits に含まない)
         double[][] dp = new double[N][1 << N];
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < dp[i].length; ++j)
