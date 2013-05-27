@@ -1,9 +1,9 @@
 package tsprunner;
 
-import java.awt.Point;
 import java.util.List;
 
 import tsp.AbstractTSPSolver;
+import tsp.Point;
 import tsp.impl.HillClimbing;
 
 public class ConsoleRunner extends AbstractRunner {

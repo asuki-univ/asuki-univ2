@@ -1,6 +1,5 @@
 package tsp;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +27,11 @@ public class TSPState {
 
     public List<Point> getPoints() {
         return Collections.unmodifiableList(points);
+    }
+
+    public List<Point> getMutablePoints() {
+        scoreCalculated = false;
+        return points;
     }
 
     public double getScore() {

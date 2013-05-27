@@ -1,10 +1,10 @@
 package tsp.impl;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
 import tsp.AbstractTSPSolver;
+import tsp.Point;
 import tsp.TSPState;
 
 public class HillClimbingImproved extends AbstractTSPSolver {

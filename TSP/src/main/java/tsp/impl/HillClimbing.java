@@ -1,9 +1,9 @@
 package tsp.impl;
 
-import java.awt.Point;
 import java.util.List;
 
 import tsp.AbstractTSPSolver;
+import tsp.Point;
 
 public class HillClimbing extends AbstractTSPSolver {
     public HillClimbing(List<Point> points) {

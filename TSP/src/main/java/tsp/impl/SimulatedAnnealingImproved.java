@@ -1,9 +1,9 @@
 package tsp.impl;
 
-import java.awt.Point;
 import java.util.List;
 import java.util.Random;
 
+import tsp.Point;
 import tsp.TSPState;
 
 public class SimulatedAnnealingImproved extends HillClimbingImproved {

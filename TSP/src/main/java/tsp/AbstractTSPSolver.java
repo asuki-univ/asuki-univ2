@@ -1,6 +1,5 @@
 package tsp;
 
-import java.awt.Point;
 import java.util.List;
 
 public abstract class AbstractTSPSolver implements TSPSolver {

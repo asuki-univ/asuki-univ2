@@ -6,13 +6,17 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import tsp.AbstractTSPSolver;
+import tsp.Point;
 import tsp.TSPSolver;
 import tsp.TSPState;
+import tsp.impl.HillClimbing;
+import tsp.impl.HillClimbingImproved;
+import tsp.impl.KOptHillClimbing;
 import tsp.impl.SimulatedAnnealingImproved;
 
 class TSPCanvas extends Canvas {
@@ -37,7 +41,7 @@ class TSPCanvas extends Canvas {
             Point p1 = points.get(i);
             Point p2 = points.get((i + 1) % points.size());
             // System.out.printf("%d - %d\n", p1.x, p1.y);
-            g.drawLine(p1.x / 10, p1.y / 10, p2.x / 10, p2.y / 10);
+            g.drawLine((int)(p1.x / 10) + 20, (int)(p1.y / 10) + 20, (int)(p2.x / 10) + 20, (int)(p2.y / 10) + 20);
         }
     }
 
@@ -94,14 +98,18 @@ public class GUIRunner extends AbstractRunner {
 //        AbstractTSPSolver solver = new HillClimbingImproved(optPoints);
 
         // AbstractTSPSolver solver = new GA(points);
-        // AbstractTSPSolver solver = new HillClimbing(points);
+        AbstractTSPSolver solver = new HillClimbing(points);
         // AbstractTSPSolver solver = new HillClimbingWithRandom(points);
 
         // 34052.487524201075
         // AbstractTSPSolver solver = new HillClimbingImproved(points);
 
         // AbstractTSPSolver solver = new SimulatedAnnealing(points);
-        TSPSolver solver = new SimulatedAnnealingImproved(points);
+        // TSPSolver solver = new SimulatedAnnealingImproved(points);
+        //TSPSolver solver = new KOptHillClimbing(points, 2);
+        //TSPSolver solver = new KOptHillClimbing(points, 3);
+        //TSPSolver solver = new KOptHillClimbing(points, 4);
+        //TSPSolver solver = new KOptHillClimbing(points, 5);
 
         run(points, solver);
     }

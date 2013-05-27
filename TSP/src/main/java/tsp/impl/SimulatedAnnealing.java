@@ -1,8 +1,9 @@
 package tsp.impl;
 
-import java.awt.Point;
 import java.util.List;
 import java.util.Random;
+
+import tsp.Point;
 
 public class SimulatedAnnealing extends HillClimbing {
     private double currentTemperature;
