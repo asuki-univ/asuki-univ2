@@ -14,9 +14,13 @@ public abstract class Player {
     protected Player(Turn turn) {
         this.turn = turn;
     }
-    
+
+    public Turn getTurn() {
+        return turn;
+    }
+
     abstract public Position play(Board board);
-    
+
     protected List<Position> findPuttableHands(Board board, Stone stone) {
         List<Position> ps = new ArrayList<Position>();
         for (int y = 1; y <= Board.HEIGHT; ++y) {
@@ -25,7 +29,7 @@ public abstract class Player {
                     ps.add(new Position(x, y));
             }
         }
-        
+
         return ps;
     }
 }
