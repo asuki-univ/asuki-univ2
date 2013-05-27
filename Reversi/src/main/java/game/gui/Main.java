@@ -15,12 +15,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 
 import player.Player;
 import player.ai.AlphaBetaEvaluationSimpleAI;
+import player.ai.LearnedAI;
 import player.ai.MinMaxSimpleAI;
 import player.ai.NegaMaxSimpleAI;
 import player.ai.NegaScoutEvaluationSimpleAI;
@@ -101,7 +103,7 @@ public class Main {
     private static Panel makeTopPanel() {
         final String[] players = new String[] {
             "Human", "Simple", "MinMax", "NegaMax", "AlphaBeta",
-            "NegaScout", "Tranposition"
+            "NegaScout", "Tranposition", "Learn"
         };
 
         Panel panel = new Panel();
@@ -210,6 +212,13 @@ public class Main {
             return new NegaScoutEvaluationSimpleAI(turn, 5);
         if ("Tranposition".equals(playerName))
             return new TranpositionEvaluationSimpleAI(turn, 5);
+        if ("Learn".equals(playerName)) {
+            try {
+                return new LearnedAI(turn, 9, 13);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         assert(false);
         throw new RuntimeException("Unknown Player");
