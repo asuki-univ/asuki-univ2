@@ -1,4 +1,4 @@
-package algorithm.secondseason.random;
+package random;
 
 import java.util.Random;
 
