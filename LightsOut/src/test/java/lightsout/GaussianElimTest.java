@@ -1,10 +1,10 @@
-package algorithm.secondseason.lightsout;
+package lightsout;
 
 import static org.junit.Assert.assertTrue;
+import lightsout.GaussianElim;
 
 import org.junit.Test;
 
-import algorithm.secondseason.lightsout.GaussianElim;
 
 public class GaussianElimTest {
 

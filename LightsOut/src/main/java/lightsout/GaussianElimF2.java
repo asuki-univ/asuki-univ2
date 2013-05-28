@@ -1,4 +1,4 @@
-package algorithm.secondseason.lightsout;
+package lightsout;
 
 public class GaussianElimF2 {
 

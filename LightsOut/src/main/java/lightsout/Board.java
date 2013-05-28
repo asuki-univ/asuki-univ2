@@ -1,4 +1,4 @@
-package algorithm.secondseason.lightsout;
+package lightsout;
 
 import java.io.PrintStream;
 
