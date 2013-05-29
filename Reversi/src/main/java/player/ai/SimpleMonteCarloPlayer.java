@@ -46,14 +46,14 @@ public class SimpleMonteCarloPlayer extends Player {
         Player whitePlayer = new RandomPlayer(Turn.WHITE);
 
         // 1手進める
-        Board nextBoard = new Board(board);
+        Board nextBoard = board.clone();
         nextBoard.put(x, y, turn.stone());
-        
+
         // 勝敗を記録
         int win = 0;
         Game game = new Game();
         for (int count = 0; count < playoutCount; ++count) {
-            Winner winner = game.play(blackPlayer, whitePlayer, new Board(nextBoard), turn.flip(), false);
+            Winner winner = game.play(blackPlayer, whitePlayer, nextBoard.clone(), turn.flip(), false);
             if (turn == Turn.BLACK && winner == Winner.BLACK || turn == Turn.WHITE && winner == Winner.WHITE) {
                 ++win;
             }

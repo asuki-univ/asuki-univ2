@@ -33,7 +33,7 @@ public class NegaScoutWithMoveOrderingSimpleAI extends Player {
             for (int x = 1; x <= Board.WIDTH; ++x) {
                 if (board.isPuttable(x, y, stone)) {
                     didPlayed = true;
-                    Board b = new Board(board);
+                    Board b = board.clone();
                     Evaluation e = evaluation.clone();
                     e.willPut(b, x, y, stone);
                     b.put(x, y, stone);

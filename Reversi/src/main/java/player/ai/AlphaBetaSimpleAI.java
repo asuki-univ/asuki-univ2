@@ -42,7 +42,7 @@ public class AlphaBetaSimpleAI extends Player {
             for (int x = 1; x <= Board.WIDTH; ++x) {
                 if (board.isPuttable(x, y, stone)) {
                     didPlayed = true;
-                    Board b = new Board(board);
+                    Board b = board.clone();
                     b.put(x, y, stone);
                     int newScoreSum = scoreSum + (stone == turn.stone() ? EVAL_VALUES[y-1][x-1] : -EVAL_VALUES[y-1][x-1]);
                     double score = -eval(b, restDepth - 1, stone.flip(), newScoreSum, -beta, -Math.max(alpha, maxScore)).getScore();

@@ -1,38 +1,23 @@
 package board;
 
-public class Board {
-    public static final int WIDTH = 8;
-    public static final int HEIGHT = 8;
-    public static final int MAP_WIDTH = 10;
-    public static final int MAP_HEIGHT = 10;
+public class Board extends BoardBase implements Cloneable {
     private static final int[] DX = new int[]{  0 , 1, 1, 1, 0, -1, -1, -1 };
     private static final int[] DY = new int[]{ -1, -1, 0, 1, 1,  1,  0, -1 };
 
-    private Stone[][] board = new Stone[MAP_HEIGHT][MAP_WIDTH];
-
     public Board() {
+    }
+
+    @Override
+    public Board clone() {
+        Board board = new Board();
+
         for (int y = 1; y <= HEIGHT; ++y) {
             for (int x = 1; x <= WIDTH; ++x) {
-                board[y][x] = Stone.EMPTY;
+                board.board[y][x] = this.board[y][x];
             }
         }
 
-        for (int y = 0; y < MAP_HEIGHT; ++y) {
-            board[y][0] = Stone.WALL;
-            board[y][MAP_WIDTH-1] = Stone.WALL;
-        }
-
-        for (int x = 0; x < MAP_WIDTH; ++x) {
-            board[0][x] = Stone.WALL;
-            board[MAP_HEIGHT-1][x] = Stone.WALL;
-        }
-    }
-
-    // Copy Constructor (Maybe we should have clone() instead.)
-    public Board(Board board) {
-        for (int y = 0; y < MAP_HEIGHT; ++y)
-            for (int x = 0; x < MAP_WIDTH; ++x)
-                this.board[y][x] = board.board[y][x];
+        return board;
     }
 
     public boolean isPuttableSomewhere(Stone stone) {
@@ -180,18 +165,6 @@ public class Board {
     }
 
     // ----------
-
-    public Stone get(Position p) {
-        return board[p.y][p.x];
-    }
-
-    public Stone get(int x, int y) {
-        return board[y][x];
-    }
-
-    public void set(int x, int y, Stone stone) {
-        board[y][x] = stone;
-    }
 
     public Stone[] getHorizontal(int y) {
         Stone[] stones = new Stone[WIDTH];

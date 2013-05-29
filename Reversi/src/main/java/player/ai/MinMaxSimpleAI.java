@@ -42,7 +42,7 @@ public class MinMaxSimpleAI extends Player {
             for (int x = 1; x <= Board.WIDTH; ++x) {
                 if (board.isPuttable(x, y, stone)) {
                     didPlayed = true;
-                    Board b = new Board(board);
+                    Board b = board.clone();
                     b.put(x, y, stone);
                     double score = evalEnemyTurn(b, restDepth - 1, stone.flip(), scoreSum + EVAL_VALUES[y-1][x-1]).getScore();
                     if (maxScore < score) {
@@ -74,7 +74,7 @@ public class MinMaxSimpleAI extends Player {
             for (int x = 1; x <= Board.WIDTH; ++x) {
                 if (board.isPuttable(x, y, stone)) {
                     didPlayed = true;
-                    Board b = new Board(board);
+                    Board b = board.clone();
                     b.put(x, y, stone);
                     double score = evalMyTurn(b, restDepth - 1, stone.flip(), scoreSum - EVAL_VALUES[y-1][x-1]).getScore();
                     if (score < minScore) {

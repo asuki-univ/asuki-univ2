@@ -45,7 +45,7 @@ public class TranpositionMoveOrderingSimpleAI extends Player {
     protected List<Position> doMoveOrdering(Board board, List<Position> ps) {
         List<EvalResult> shallowEvaluation = new ArrayList<EvalResult>();
         for (Position p : ps) {
-            Board b = new Board(board);
+            Board b = board.clone();
             Evaluation e = new BoardScoreEvaluation(turn);
             e.willPut(board, p.x, p.y, turn.stone());
             b.put(p.x, p.y, turn.stone());
@@ -94,7 +94,7 @@ public class TranpositionMoveOrderingSimpleAI extends Player {
         for (Position p : puttablePositions) {
             int x = p.x, y = p.y;
             didPlayed = true;
-            Board b = new Board(board);
+            Board b = board.clone();
             Evaluation e = evaluation.clone();
             e.willPut(b, x, y, stone);
             b.put(x, y, stone);

@@ -95,7 +95,7 @@ public class TranpositionEvaluationSimpleAI extends Player {
                 if (!board.isPuttable(x, y, stone))
                     continue;
                 didPlayed = true;
-                Board b = new Board(board);
+                Board b = board.clone();
                 Evaluation e = evaluation.clone();
                 e.willPut(b, x, y, stone);
                 b.put(x, y, stone);

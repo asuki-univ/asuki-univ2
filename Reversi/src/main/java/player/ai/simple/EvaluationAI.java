@@ -31,7 +31,7 @@ public abstract class EvaluationAI extends Player {
 
                 // この盤面を評価する
                 Evaluation e = evaluationFactory.makeEvaluation(turn);
-                Board b = new Board(board);
+                Board b = board.clone();
                 e.willPut(b, x, y, turn.stone());
                 b.put(x, y, turn.stone());
 
