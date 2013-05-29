@@ -10,6 +10,12 @@ public class Point {
     public double distance(Point p) {
         double dx = x - p.x;
         double dy = y - p.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    public double attDistance(Point p) {
+        double dx = x - p.x;
+        double dy = y - p.y;
 
         double r = Math.sqrt((dx * dx + dy * dy) / 10);
         double t = Math.round(r);
