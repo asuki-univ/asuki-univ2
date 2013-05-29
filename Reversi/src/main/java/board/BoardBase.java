@@ -33,4 +33,46 @@ public class BoardBase {
     public void set(int x, int y, Stone stone) {
         board[y][x] = stone;
     }
+
+    public void setup() {
+        for (int y = 1; y <= HEIGHT; ++y)
+            for (int x = 1; x <= WIDTH; ++x)
+                board[y][x] = Stone.EMPTY;
+
+        board[4][4] = board[5][5] = Stone.WHITE;
+        board[4][5] = board[5][4] = Stone.BLACK;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(' ');
+        for (int x = 1; x <= WIDTH; ++x) {
+            builder.append((char)('0' + x));
+        }
+        builder.append('\n');
+        for (int y = 1; y <= HEIGHT; ++y) {
+            builder.append((char)('0' + y));
+            for (int x = 1; x <= WIDTH; ++x) {
+                switch (board[y][x]) {
+                case EMPTY:
+                    builder.append('.'); break;
+                case BLACK:
+                    builder.append('B'); break;
+                case WHITE:
+                    builder.append('W'); break;
+                case WALL:
+                    builder.append('*'); break;
+                }
+            }
+            builder.append('\n');
+        }
+
+        return builder.toString();
+    }
+
+    public void show() {
+        System.out.println(toString());
+    }
 }

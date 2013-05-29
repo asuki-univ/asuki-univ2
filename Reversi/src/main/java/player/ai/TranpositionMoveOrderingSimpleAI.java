@@ -24,7 +24,7 @@ class HandComparator implements Comparator<EvalResult> {
     }
 }
 
-public class TranpositionMoveOrderingSimpleAI extends Player {
+public class TranpositionMoveOrderingSimpleAI extends AIPlayer {
     private final int maxDepth;
 
     public TranpositionMoveOrderingSimpleAI(Turn turn, int maxDepth) {

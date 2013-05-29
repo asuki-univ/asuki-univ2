@@ -1,12 +1,11 @@
 package player.ai.simple;
 
-import player.Player;
-import player.ai.EvalResult;
+import player.ai.AIPlayer;
 import board.Board;
 import board.Position;
 import board.Turn;
 
-public class SimpleAI extends Player {
+public class SimpleAI extends AIPlayer {
     private static final int[][] EVAL_VALUES = {
         { 100, -50, 35, 30, 30, 35, -50, 100 },
         { -50, -70, 10, 15, 15, 10, -70, -50 },
@@ -21,28 +20,20 @@ public class SimpleAI extends Player {
     public SimpleAI(Turn turn) {
         super(turn);
     }
-    
+
     @Override
     public Position play(Board board) {
-        return eval(board).getPosition();
-    }
-    
-    private EvalResult eval(Board board) {
-        Position p = null;
+        Position selectedPosition = null;
         int maxValue = -200;
 
-        for (int y = 1; y <= Board.HEIGHT; ++y) {
-            for (int x = 1; x <= Board.WIDTH; ++x) {
-                if (board.isPuttable(x, y, turn.stone())) {
-                    if (maxValue < EVAL_VALUES[y-1][x-1]) {
-                        maxValue = EVAL_VALUES[y-1][x-1];
-                        p = new Position(x, y);
-                    }
-                }
+        for (Position p : findPuttableHands(board, turn.stone())) {
+            if (maxValue < EVAL_VALUES[p.y - 1][p.x - 1]) {
+                maxValue = EVAL_VALUES[p.y - 1][p.x - 1];
+                selectedPosition = p;
             }
         }
 
-        assert(p != null);
-        return new EvalResult(maxValue, p);
+        assert (selectedPosition != null);
+        return selectedPosition;
     }
 }
