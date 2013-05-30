@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import player.Player;
-import player.ai.eval.BoardScoreEvaluation;
-import player.ai.eval.Evaluation;
+import player.ai.eval.BoardScoreEvaluator;
+import player.ai.eval.Evaluator;
 import board.Board;
 import board.Position;
-import board.Stone;
 import board.Turn;
 
 class TranpositionTableKey {
@@ -61,15 +60,15 @@ public class TranpositionEvaluationSimpleAI extends Player {
 
     @Override
     public Position play(Board board) {
-        return eval(board, maxDepth, 5, turn.stone(),
+        return eval(board, maxDepth, 5, turn,
                 new HashMap<TranpositionTableKey, TranpositionTableValue>(),
-                new BoardScoreEvaluation(turn), Integer.MIN_VALUE, Integer.MAX_VALUE).getPosition();
+                new BoardScoreEvaluator(turn), Integer.MIN_VALUE, Integer.MAX_VALUE).getPosition();
     }
 
-    protected EvalResult eval(Board board, int restDepth, int restTranpositionDepth, Stone stone,
-            Map<TranpositionTableKey, TranpositionTableValue> tranpositionTable, Evaluation evaluation, double alpha, double beta) {
+    protected EvalResult eval(Board board, int restDepth, int restTranpositionDepth, Turn currentTurn,
+            Map<TranpositionTableKey, TranpositionTableValue> tranpositionTable, Evaluator evaluation, double alpha, double beta) {
         if (restDepth == 0)
-            return new EvalResult(evaluation.score(board, stone), null);
+            return new EvalResult(evaluation.score(board, currentTurn), null);
 
         TranpositionTableKey key = new TranpositionTableKey(restTranpositionDepth, board);
         double lower = Double.NEGATIVE_INFINITY;
@@ -92,20 +91,20 @@ public class TranpositionEvaluationSimpleAI extends Player {
         Position p = null;
         EXTERNAL_LOOP: for (int y = 1; y <= Board.HEIGHT; ++y) {
             for (int x = 1; x <= Board.WIDTH; ++x) {
-                if (!board.isPuttable(x, y, stone))
+                if (!board.isPuttable(x, y, currentTurn.stone()))
                     continue;
                 didPlayed = true;
                 Board b = board.clone();
-                Evaluation e = evaluation.clone();
-                e.willPut(b, x, y, stone);
-                b.put(x, y, stone);
+                Evaluator e = evaluation.clone();
+                e.willPut(b, x, y, currentTurn.stone());
+                b.put(x, y, currentTurn.stone());
 
                 double a = Math.max(alpha, maxScore);
-                double score = -eval(b, restDepth - 1, restTranpositionDepth - 1, stone.flip(), tranpositionTable, e, -(a+1), -a).getScore();
+                double score = -eval(b, restDepth - 1, restTranpositionDepth - 1, currentTurn.flip(), tranpositionTable, e, -(a+1), -a).getScore();
                 if (a < score && score < beta) {
                     e = evaluation.clone();
-                    e.willPut(board, x, y, stone);
-                    score = -eval(b, restDepth - 1, restTranpositionDepth - 1, stone.flip(), tranpositionTable, e, -beta, -score).getScore();
+                    e.willPut(board, x, y, currentTurn.stone());
+                    score = -eval(b, restDepth - 1, restTranpositionDepth - 1, currentTurn.flip(), tranpositionTable, e, -beta, -score).getScore();
                 }
 
                 if (maxScore < score) {
@@ -133,7 +132,7 @@ public class TranpositionEvaluationSimpleAI extends Player {
 
             return new EvalResult(maxScore, p);
         } else {
-            double score = -eval(board, restDepth - 1, restTranpositionDepth - 1, stone.flip(), tranpositionTable, evaluation, -beta, -alpha).getScore();
+            double score = -eval(board, restDepth - 1, restTranpositionDepth - 1, currentTurn.flip(), tranpositionTable, evaluation, -beta, -alpha).getScore();
             return new EvalResult(score, null);
         }
     }

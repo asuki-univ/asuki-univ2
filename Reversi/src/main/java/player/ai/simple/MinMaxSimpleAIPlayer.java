@@ -5,7 +5,6 @@ import java.util.List;
 import player.ai.EvalResult;
 import board.Board;
 import board.Position;
-import board.Stone;
 import board.Turn;
 
 public class MinMaxSimpleAIPlayer extends SimpleAIPlayer {
@@ -18,20 +17,20 @@ public class MinMaxSimpleAIPlayer extends SimpleAIPlayer {
 
     @Override
     public Position play(Board board) {
-        return evalMyTurn(board, maxDepth, turn.stone(), 0).getPosition();
+        return evalMyTurn(board, maxDepth, 0).getPosition();
     }
 
-    private EvalResult evalMyTurn(Board board, int restDepth, Stone stone, int scoreSum) {
+    private EvalResult evalMyTurn(Board board, int restDepth, int scoreSum) {
         // これ以上は読まない
         if (restDepth == 0)
             return new EvalResult(scoreSum, null);
 
         // 置ける手を全て列挙
-        List<Position> puttablePositions = findPuttableHands(board, stone);
+        List<Position> puttablePositions = board.findPuttableHands(turn.stone());
 
         // 自分がおける場所がないならば、相手のターンになる。
         if (puttablePositions.isEmpty()) {
-            double score = evalEnemyTurn(board, restDepth - 1, stone.flip(), scoreSum).getScore();
+            double score = evalEnemyTurn(board, restDepth - 1, scoreSum).getScore();
             return new EvalResult(score, null);
         }
 
@@ -41,8 +40,8 @@ public class MinMaxSimpleAIPlayer extends SimpleAIPlayer {
 
         for (Position p : puttablePositions) {
             Board b = board.clone();
-            b.put(p.x, p.y, stone);
-            double score = evalEnemyTurn(b, restDepth - 1, stone.flip(), scoreSum + EVAL_VALUES[p.y - 1][p.x - 1]).getScore();
+            b.put(p.x, p.y, turn.stone());
+            double score = evalEnemyTurn(b, restDepth - 1, scoreSum + EVAL_VALUES[p.y - 1][p.x - 1]).getScore();
             if (maxScore < score) {
                 maxScore = score;
                 selectedPosition = p;
@@ -52,17 +51,17 @@ public class MinMaxSimpleAIPlayer extends SimpleAIPlayer {
         return new EvalResult(maxScore, selectedPosition);
     }
 
-    private EvalResult evalEnemyTurn(Board board, int restDepth, Stone stone, int scoreSum) {
+    private EvalResult evalEnemyTurn(Board board, int restDepth, int scoreSum) {
         // これ以上は読まない
         if (restDepth == 0)
             return new EvalResult(scoreSum, null);
 
         // 置ける手を全て列挙
-        List<Position> puttablePositions = findPuttableHands(board, stone);
+        List<Position> puttablePositions = board.findPuttableHands(turn.flip().stone());
 
         // 相手がおける場所がないならば、自分のターンになる。
         if (puttablePositions.isEmpty()) {
-            double score = evalMyTurn(board, restDepth - 1, stone.flip(), scoreSum).getScore();
+            double score = evalMyTurn(board, restDepth - 1, scoreSum).getScore();
             return new EvalResult(score, null);
         }
 
@@ -72,8 +71,8 @@ public class MinMaxSimpleAIPlayer extends SimpleAIPlayer {
 
         for (Position p : puttablePositions) {
             Board b = board.clone();
-            b.put(p.x, p.y, stone);
-            double score = evalMyTurn(b, restDepth - 1, stone.flip(), scoreSum - EVAL_VALUES[p.y - 1][p.x - 1]).getScore();
+            b.put(p.x, p.y, turn.flip().stone());
+            double score = evalMyTurn(b, restDepth - 1, scoreSum - EVAL_VALUES[p.y - 1][p.x - 1]).getScore();
             if (score < minScore) {
                 minScore = score;
                 selectedPosition = p;

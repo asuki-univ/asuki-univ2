@@ -1,11 +1,11 @@
 package player.ai.simple;
 
-import player.ai.AIPlayer;
+import player.Player;
 import board.Board;
 import board.Position;
 import board.Turn;
 
-public class SimpleAIPlayer extends AIPlayer {
+public class SimpleAIPlayer extends Player {
     protected static final int[][] EVAL_VALUES = {
         { 100, -50, 35, 30, 30, 35, -50, 100 },
         { -50, -70, 10, 15, 15, 10, -70, -50 },
@@ -26,7 +26,7 @@ public class SimpleAIPlayer extends AIPlayer {
         Position selectedPosition = null;
         int maxValue = Integer.MIN_VALUE;
 
-        for (Position p : findPuttableHands(board, turn.stone())) {
+        for (Position p : board.findPuttableHands(turn.stone())) {
             if (maxValue < EVAL_VALUES[p.y - 1][p.x - 1]) {
                 maxValue = EVAL_VALUES[p.y - 1][p.x - 1];
                 selectedPosition = p;

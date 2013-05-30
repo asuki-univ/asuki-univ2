@@ -37,8 +37,6 @@ public class FixedStones {
         count += fixedStone[toInt(left)];
         count += fixedStone[toInt(right)];
 
-        System.out.printf("%d %d %d %d\n", fixedStone[toInt(upper)], fixedStone[toInt(lower)], fixedStone[toInt(left)], fixedStone[toInt(right)]);
-
         // 角は重複して数えているので、除去する
         if (board.get(1, 1) == stone)
             --count;

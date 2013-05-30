@@ -1,8 +1,11 @@
 package board;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board extends BoardBase implements Cloneable {
-    private static final int[] DX = new int[]{  0 , 1, 1, 1, 0, -1, -1, -1 };
-    private static final int[] DY = new int[]{ -1, -1, 0, 1, 1,  1,  0, -1 };
+    public static final int[] DX = new int[]{  0 , 1, 1, 1, 0, -1, -1, -1 };
+    public static final int[] DY = new int[]{ -1, -1, 0, 1, 1,  1,  0, -1 };
 
     public Board() {
     }
@@ -20,16 +23,35 @@ public class Board extends BoardBase implements Cloneable {
         return board;
     }
 
-    public boolean isPuttableSomewhere(Stone stone) {
-        for (int y = 1; y <= HEIGHT; ++y) {
-            for (int x = 1; x <= WIDTH; ++x) {
-                if (isPuttable(x, y, stone))
-                    return true;
+    public void put(int x, int y, Stone stone) {
+        assert(isPuttable(x, y, stone));
+
+        board[y][x] = stone;
+        for (int i = 0; i < 8; ++i) {
+            int count = countFlippable(x, y, stone, DX[i], DY[i]);
+            for (int j = 1; j <= count; ++j) {
+                board[y + DY[i] * j][x + DX[i] * j] = stone;
             }
         }
-
-        return false;
     }
+
+    public int countFlippable(int x, int y, Stone stone, int dx, int dy) {
+        int count = 0;
+        int yy = y + dy, xx = x + dx;
+        Stone opponent = stone.flip();
+        while (board[yy][xx] == opponent) {
+            ++count;
+            yy += dy;
+            xx += dx;
+        }
+
+        if (board[yy][xx] == stone)
+            return count;
+
+        return 0;
+    }
+
+    // --------------------------------------------------
 
     public boolean isPuttable(int x, int y, Stone stone) {
         if (x < 1 || WIDTH < x || y < 1 || HEIGHT < y)
@@ -45,17 +67,32 @@ public class Board extends BoardBase implements Cloneable {
         return false;
     }
 
-    public void put(int x, int y, Stone stone) {
-        assert(isPuttable(x, y, stone));
-
-        board[y][x] = stone;
-        for (int i = 0; i < 8; ++i) {
-            int count = countFlippable(x, y, stone, DX[i], DY[i]);
-            for (int j = 1; j <= count; ++j) {
-                board[y + DY[i] * j][x + DX[i] * j] = stone;
+    public boolean isPuttableSomewhere(Stone stone) {
+        for (int y = 1; y <= HEIGHT; ++y) {
+            for (int x = 1; x <= WIDTH; ++x) {
+                if (isPuttable(x, y, stone))
+                    return true;
             }
         }
+
+        return false;
     }
+
+    // --------------------------------------------------
+
+    public List<Position> findPuttableHands(Stone stone) {
+        List<Position> ps = new ArrayList<Position>();
+        for (int y = 1; y <= Board.HEIGHT; ++y) {
+            for (int x = 1; x <= Board.WIDTH; ++x) {
+                if (isPuttable(x, y, stone))
+                    ps.add(new Position(x, y));
+            }
+        }
+
+        return ps;
+    }
+
+    // --------------------------------------------------
 
     public int countStones() {
         int count = 0;
@@ -75,22 +112,6 @@ public class Board extends BoardBase implements Cloneable {
                     ++count;
 
         return count;
-    }
-
-    private int countFlippable(int x, int y, Stone stone, int dx, int dy) {
-        int count = 0;
-        int yy = y + dy, xx = x + dx;
-        Stone opponent = stone.flip();
-        while (board[yy][xx] == opponent) {
-            ++count;
-            yy += dy;
-            xx += dx;
-        }
-
-        if (board[yy][xx] == stone)
-            return count;
-
-        return 0;
     }
 
     @Override

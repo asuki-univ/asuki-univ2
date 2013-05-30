@@ -1,11 +1,7 @@
 package player;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import board.Board;
 import board.Position;
-import board.Stone;
 import board.Turn;
 
 public abstract class Player {

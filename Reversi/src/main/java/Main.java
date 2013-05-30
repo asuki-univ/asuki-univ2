@@ -1,19 +1,8 @@
 import game.Game;
 import game.Game.Winner;
 import player.Player;
-
-import player.ai.AlphaBetaEvaluationSimpleWithCompleteReadingAI;
-import player.ai.AlphaBetaSimpleAI;
-import player.ai.LearnedAI;
-import player.ai.NegaScoutEvaluationSimpleAI;
-import player.ai.NegaScoutEvaluationSimpleWithCompleteReadingAI;
-import player.ai.TranpositionEvaluationCompleteReadingSimpleAI;
-import player.ai.TranpositionEvaluationSimpleAI;
-import player.ai.simple.MinMaxSimpleAIPlayer;
-import player.ai.simple.SimpleAIPlayer;
-
-import player.ai.*;
-
+import player.ai.RandomPlayer;
+import player.ai.impl.AlphaBetaBoardScoreAIPlayer;
 import board.Board;
 import board.Turn;
 
@@ -31,7 +20,7 @@ public class Main {
         //Player whitePlayer = new UCB1MonteCarloPlayer(Turn.WHITE, 1000);
         //Player whitePlayer = new MinMaxSimpleAI(Turn.WHITE, 5);
         //Player whitePlayer = new NegaMaxSimpleAI(Turn.WHITE, 5);
-        Player whitePlayer = new AlphaBetaSimpleAI(Turn.WHITE, 5);
+        Player whitePlayer = new AlphaBetaBoardScoreAIPlayer(Turn.WHITE, 5);
         //Player whitePlayer = new AlphaBetaEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
         //Player whitePlayer = new NegaScoutEvaluationSimpleAI(Turn.WHITE, 5);
         //Player whitePlayer = new NegaScoutEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
