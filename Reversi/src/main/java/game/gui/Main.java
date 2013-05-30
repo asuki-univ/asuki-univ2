@@ -23,11 +23,11 @@ import javax.swing.BoxLayout;
 import player.Player;
 import player.ai.AlphaBetaEvaluationSimpleAI;
 import player.ai.LearnedAI;
-import player.ai.MinMaxSimpleAI;
 import player.ai.NegaMaxSimpleAI;
 import player.ai.NegaScoutEvaluationSimpleAI;
 import player.ai.TranpositionEvaluationSimpleAI;
-import player.ai.simple.SimpleAI;
+import player.ai.simple.MinMaxSimpleAI;
+import player.ai.simple.SimpleAIPlayer;
 
 import board.Board;
 import board.Position;
@@ -201,7 +201,7 @@ public class Main {
         String playerName = Turn.BLACK.equals(turn) ? blackPlayerChoice.getSelectedItem() : whitePlayerChoice.getSelectedItem();
 
         if ("Simple".equals(playerName))
-            return new SimpleAI(turn);
+            return new SimpleAIPlayer(turn);
         if ("MinMax".equals(playerName))
             return new MinMaxSimpleAI(turn, 5);
         if ("NegaMax".equals(playerName))

@@ -5,15 +5,14 @@ import player.Player;
 import player.ai.AlphaBetaEvaluationSimpleWithCompleteReadingAI;
 import player.ai.AlphaBetaSimpleAI;
 import player.ai.LearnedAI;
-import player.ai.MinMaxSimpleAI;
 import player.ai.NegaScoutEvaluationSimpleAI;
 import player.ai.NegaScoutEvaluationSimpleWithCompleteReadingAI;
 import player.ai.TranpositionEvaluationCompleteReadingSimpleAI;
 import player.ai.TranpositionEvaluationSimpleAI;
-import player.ai.simple.SimpleAI;
+import player.ai.simple.MinMaxSimpleAI;
+import player.ai.simple.SimpleAIPlayer;
 
 import player.ai.*;
-import player.ai.SimpleMonteCarloPlayer;
 
 import board.Board;
 import board.Turn;

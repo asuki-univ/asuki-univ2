@@ -18,34 +18,35 @@ public class BoardScoreEvaluation implements Evaluation {
 
     private final Turn turn;
     private int currentScore;
-    
+
     public BoardScoreEvaluation(Turn turn) {
         this(turn, 0);
     }
-    
+
     private BoardScoreEvaluation(Turn turn, int score) {
         this.turn = turn;
         this.currentScore = score;
     }
-    
+
     @Override
     public Evaluation clone() {
         return new BoardScoreEvaluation(turn, currentScore);
     }
-    
-    @Override
-    public int score(Board board, Stone stone) {
-        if (stone == turn.stone())
-            return currentScore;
-        else
-            return -currentScore;
-    }
-    
+
     @Override
     public void willPut(Board board, int x, int y, Stone stone) {
-        if (stone == turn.stone())
+        if (stone.equals(turn.stone()))
             currentScore += EVAL_VALUES[y-1][x-1];
         else
             currentScore -= EVAL_VALUES[y-1][x-1];
+    }
+
+    @Override
+    public int score(Board board, Stone stone) {
+        // 順番が自分でなければ、負の得点を返す。
+        if (stone.equals(turn.stone()))
+            return currentScore;
+        else
+            return -currentScore;
     }
 }
