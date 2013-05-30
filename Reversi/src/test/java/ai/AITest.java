@@ -8,10 +8,10 @@ import org.junit.Test;
 import player.Player;
 import player.ai.AlphaBetaEvaluationSimpleAI;
 import player.ai.AlphaBetaSimpleAI;
-import player.ai.NegaMaxSimpleAI;
 import player.ai.NegaScoutEvaluationSimpleAI;
 import player.ai.TranpositionEvaluationSimpleAI;
-import player.ai.simple.MinMaxSimpleAI;
+import player.ai.simple.MinMaxSimpleAIPlayer;
+import player.ai.simple.NegaMaxSimpleAI;
 import board.Board;
 import board.BoardParser;
 import board.Position;
@@ -32,7 +32,7 @@ public class AITest {
 
         // MinMax, NegaMax, AlphaBeta should return the same evaluation.
         // Move Ordering might return the same evaluation hand, but it might be the different one.
-        Player minmax = new MinMaxSimpleAI(Turn.WHITE, 5);
+        Player minmax = new MinMaxSimpleAIPlayer(Turn.WHITE, 5);
         Player negamax = new NegaMaxSimpleAI(Turn.WHITE, 5);
         Player alphabeta = new AlphaBetaSimpleAI(Turn.WHITE, 5);
         Player alphabeta2 = new AlphaBetaEvaluationSimpleAI(Turn.WHITE, 5);

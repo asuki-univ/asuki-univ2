@@ -2,18 +2,16 @@ package player.ai.simple;
 
 import java.util.List;
 
-import player.Player;
-import player.ai.AIPlayer;
 import player.ai.EvalResult;
 import board.Board;
 import board.Position;
 import board.Stone;
 import board.Turn;
 
-public class MinMaxSimpleAI extends SimpleAIPlayer {
+public class MinMaxSimpleAIPlayer extends SimpleAIPlayer {
     private final int maxDepth;
 
-    public MinMaxSimpleAI(Turn turn, int maxDepth) {
+    public MinMaxSimpleAIPlayer(Turn turn, int maxDepth) {
         super(turn);
         this.maxDepth = maxDepth;
     }
@@ -75,7 +73,7 @@ public class MinMaxSimpleAI extends SimpleAIPlayer {
         for (Position p : puttablePositions) {
             Board b = board.clone();
             b.put(p.x, p.y, stone);
-            double score = evalEnemyTurn(b, restDepth - 1, stone.flip(), scoreSum + EVAL_VALUES[p.y - 1][p.x - 1]).getScore();
+            double score = evalMyTurn(b, restDepth - 1, stone.flip(), scoreSum - EVAL_VALUES[p.y - 1][p.x - 1]).getScore();
             if (score < minScore) {
                 minScore = score;
                 selectedPosition = p;

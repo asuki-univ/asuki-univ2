@@ -23,10 +23,10 @@ import javax.swing.BoxLayout;
 import player.Player;
 import player.ai.AlphaBetaEvaluationSimpleAI;
 import player.ai.LearnedAI;
-import player.ai.NegaMaxSimpleAI;
 import player.ai.NegaScoutEvaluationSimpleAI;
 import player.ai.TranpositionEvaluationSimpleAI;
-import player.ai.simple.MinMaxSimpleAI;
+import player.ai.simple.MinMaxSimpleAIPlayer;
+import player.ai.simple.NegaMaxSimpleAI;
 import player.ai.simple.SimpleAIPlayer;
 
 import board.Board;
@@ -203,7 +203,7 @@ public class Main {
         if ("Simple".equals(playerName))
             return new SimpleAIPlayer(turn);
         if ("MinMax".equals(playerName))
-            return new MinMaxSimpleAI(turn, 5);
+            return new MinMaxSimpleAIPlayer(turn, 5);
         if ("NegaMax".equals(playerName))
             return new NegaMaxSimpleAI(turn, 5);
         if ("AlphaBeta".equals(playerName))
