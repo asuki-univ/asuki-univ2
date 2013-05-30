@@ -2,7 +2,6 @@ package player.ai.simple;
 
 import java.util.List;
 
-import player.Player;
 import player.ai.EvalResult;
 import board.Board;
 import board.Position;
@@ -38,7 +37,7 @@ public class NegaMaxSimpleAI extends SimpleAIPlayer {
         }
 
         // 自分の番では、評価が最も大きくなるものを選ぶ。
-        double maxScore = -10000;
+        double maxScore = Double.NEGATIVE_INFINITY;
         Position p = null;
         for (int y = 1; y <= Board.HEIGHT; ++y) {
             for (int x = 1; x <= Board.WIDTH; ++x) {

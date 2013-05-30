@@ -1,7 +1,6 @@
-package player.ai.simple;
+package player.ai;
 
 import player.Player;
-import player.ai.EvalResult;
 import player.ai.eval.Evaluation;
 import board.Board;
 import board.Position;

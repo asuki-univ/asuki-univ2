@@ -10,11 +10,11 @@ import board.Turn;
 public class RandomPlayer extends Player {
 
     private Random random = new Random();
-    
+
     public RandomPlayer(Turn turn) {
         super(turn);
     }
-    
+
     @Override
     public Position play(Board board) {
         // 打てるところにランダムに打つ
@@ -26,7 +26,7 @@ public class RandomPlayer extends Player {
                 //System.out.println("Invalid.");
                 continue;
             }
-            
+
             return new Position(x, y);
         }
     }

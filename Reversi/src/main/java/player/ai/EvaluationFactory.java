@@ -1,4 +1,4 @@
-package player.ai.simple;
+package player.ai;
 
 import player.ai.eval.Evaluation;
 import board.Turn;

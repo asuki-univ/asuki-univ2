@@ -24,7 +24,7 @@ public class SimpleAIPlayer extends AIPlayer {
     @Override
     public Position play(Board board) {
         Position selectedPosition = null;
-        int maxValue = -200;
+        int maxValue = Integer.MIN_VALUE;
 
         for (Position p : findPuttableHands(board, turn.stone())) {
             if (maxValue < EVAL_VALUES[p.y - 1][p.x - 1]) {
