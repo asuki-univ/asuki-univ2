@@ -52,10 +52,10 @@ public class TSPState {
             Point p1 = points.get(i - 1);
             Point p2 = points.get(i);
 
-            sumDistance += p1.distance(p2);
+            sumDistance += p1.attDistance(p2);
         }
 
-        sumDistance += points.get(0).distance(points.get(points.size() - 1));
+        sumDistance += points.get(0).attDistance(points.get(points.size() - 1));
         return sumDistance;
     }
 
@@ -63,7 +63,7 @@ public class TSPState {
     public double distance(int i, int j) {
         Point p1 = points.get(i % points.size());
         Point p2 = points.get(j % points.size());
-        return p1.distance(p2);
+        return p1.attDistance(p2);
     }
 
     // 点 Pi, Pj を入れ替える

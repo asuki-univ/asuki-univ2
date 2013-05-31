@@ -3,6 +3,7 @@ package tsp;
 import java.util.List;
 
 public class BitDPSolver {
+    private static final int NOT_INITIALIZED = -1;
     private List<Point> points;
     private final int N;
 
@@ -19,24 +20,17 @@ public class BitDPSolver {
         double[][] dp = new double[N][1 << N];
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < dp[i].length; ++j)
-                dp[i][j] = -1;
+                dp[i][j] = NOT_INITIALIZED;
         }
 
         for (int i = 0; i < N; ++i)
             dp[i][0] = d(0, i);
 
-        double result = Double.POSITIVE_INFINITY;
-        for (int i = 1; i < N; ++i) {
-            double r = calc(dp, i, ((1 << N) - 1) ^ (1 << i)) + d(0, i);
-            if (r < result)
-                result = r;
-        }
-
-        return result;
+        return calc(dp, 0, ((1 << N) - 1) ^ 1);
     }
 
     private double calc(double[][] dp, int x, int bits) {
-        if (dp[x][bits] >= 0)
+        if (dp[x][bits] != NOT_INITIALIZED)
             return dp[x][bits];
 
         double minValue = Double.POSITIVE_INFINITY;

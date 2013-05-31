@@ -10,11 +10,12 @@ public class HumanPlayer extends Player {
     public HumanPlayer(Turn turn) {
         super(turn);
     }
-    
+
     @Override
     public Position play(Board board) {
+        @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
-        
+
         while (true) {
             System.out.print("(x, y) = ?");
             int x = scanner.nextInt();

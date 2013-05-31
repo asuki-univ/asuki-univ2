@@ -11,13 +11,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import tsp.AbstractTSPSolver;
 import tsp.Point;
 import tsp.TSPSolver;
 import tsp.TSPState;
-import tsp.impl.HillClimbing;
-import tsp.impl.HillClimbingImproved;
-import tsp.impl.KOptHillClimbing;
 import tsp.impl.SimulatedAnnealingImproved;
 
 class TSPCanvas extends Canvas {

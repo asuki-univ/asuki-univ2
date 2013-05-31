@@ -7,28 +7,24 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.IOException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 
 import player.Player;
-import player.ai.AlphaBetaEvaluationSimpleAI;
-import player.ai.LearnedAI;
-import player.ai.MinMaxSimpleAI;
-import player.ai.NegaMaxSimpleAI;
-import player.ai.NegaScoutEvaluationSimpleAI;
-import player.ai.TranpositionEvaluationSimpleAI;
-import player.ai.simple.SimpleAI;
-
+import player.ai.impl.AlphaBetaAdvancedAIPlayer;
+import player.ai.impl.NegaMaxAdvancedAIPlayer;
+import player.ai.impl.NegaScoutAdvancedAIPlayer;
+import player.ai.impl.TranpositionAdvancedAIPlayer;
+import player.ai.simple.MinMaxSimpleAIPlayer;
+import player.ai.simple.NegaMaxSimpleAIPlayer;
+import player.ai.simple.SimpleAIPlayer;
 import board.Board;
 import board.Position;
 import board.Stone;
@@ -102,8 +98,8 @@ public class Main {
 
     private static Panel makeTopPanel() {
         final String[] players = new String[] {
-            "Human", "Simple", "MinMax", "NegaMax", "AlphaBeta",
-            "NegaScout", "Tranposition", "Learn"
+            "Human", "Simple", "MinMax", "NegaMax", "NegaMax (Advanced)", "AlphaBeta",
+            "NegaScout", "Tranposition",
         };
 
         Panel panel = new Panel();
@@ -121,6 +117,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentGameState = GameState.BLACK_TURN;
+                board.setup();
                 doTurn();
             }
         });
@@ -201,24 +198,19 @@ public class Main {
         String playerName = Turn.BLACK.equals(turn) ? blackPlayerChoice.getSelectedItem() : whitePlayerChoice.getSelectedItem();
 
         if ("Simple".equals(playerName))
-            return new SimpleAI(turn);
+            return new SimpleAIPlayer(turn);
         if ("MinMax".equals(playerName))
-            return new MinMaxSimpleAI(turn, 5);
+            return new MinMaxSimpleAIPlayer(turn, 5);
         if ("NegaMax".equals(playerName))
-            return new NegaMaxSimpleAI(turn, 5);
+            return new NegaMaxSimpleAIPlayer(turn, 5);
+        if ("NegaMax (Advanced)".equals(playerName))
+            return new NegaMaxAdvancedAIPlayer(turn, 5);
         if ("AlphaBeta".equals(playerName))
-            return new AlphaBetaEvaluationSimpleAI(turn, 5);
+            return new AlphaBetaAdvancedAIPlayer(turn, 5);
         if ("NegaScout".equals(playerName))
-            return new NegaScoutEvaluationSimpleAI(turn, 5);
+            return new NegaScoutAdvancedAIPlayer(turn, 5);
         if ("Tranposition".equals(playerName))
-            return new TranpositionEvaluationSimpleAI(turn, 5);
-        if ("Learn".equals(playerName)) {
-            try {
-                return new LearnedAI(turn, 9, 13);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+            return new TranpositionAdvancedAIPlayer(turn, 5);
 
         assert(false);
         throw new RuntimeException("Unknown Player");

@@ -12,9 +12,9 @@ import board.Position;
 import board.Turn;
 
 /**
- * 
+ *
  * @author tomohiko
- * 
+ *
  */
 public class UCB1MonteCarloPlayer extends Player {
 
@@ -31,7 +31,7 @@ public class UCB1MonteCarloPlayer extends Player {
         long start = System.currentTimeMillis();
         Map<Position, PlayoutResult> counter = new HashMap<Position, PlayoutResult>();
         int ucbCount = 0;
-        
+
         // 1度は全ての可能な手で playout を行う
         for (int y = 1; y <= Board.HEIGHT; ++y) {
             for (int x = 1; x <= Board.WIDTH; ++x) {
@@ -44,7 +44,7 @@ public class UCB1MonteCarloPlayer extends Player {
                 counter.put(position, new PlayoutResult(1, win));
             }
         }
-        
+
         // UCB を計算し次の playout 対象を選ぶ
         Position maxPosition = null;
         for (; ucbCount < maxUCBCount; ++ucbCount) {
@@ -84,23 +84,23 @@ public class UCB1MonteCarloPlayer extends Player {
 
     private int playout(int x, int y, Board board) {
         // 1手進める
-        Board nextBoard = new Board(board);
+        Board nextBoard = board.clone();
         nextBoard.put(x, y, turn.stone());
-        
+
         // ランダムに打ち合うプレーヤーを準備
         Player blackPlayer = new RandomPlayer(Turn.BLACK);
         Player whitePlayer = new RandomPlayer(Turn.WHITE);
 
         // 1回だけ戦わせる
         Game game = new Game();
-        Winner winner = game.play(blackPlayer, whitePlayer, new Board(nextBoard), turn.flip(), false);
+        Winner winner = game.play(blackPlayer, whitePlayer, nextBoard.clone(), turn.flip(), false);
         if (turn == Turn.BLACK && winner == Winner.BLACK || turn == Turn.WHITE && winner == Winner.WHITE) {
             return 1;
         } else {
             return 0;
         }
     }
-    
+
     private static class PlayoutResult {
         private int playoutCount;
         private int winCount;
@@ -109,7 +109,7 @@ public class UCB1MonteCarloPlayer extends Player {
             this.playoutCount = playoutCount;
             this.winCount = winCount;
         }
-        
+
         @Override
         public String toString() {
             return "playout: " + playoutCount + ", win: " + winCount;

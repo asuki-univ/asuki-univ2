@@ -1,18 +1,17 @@
 package player.ai;
 
-import java.util.HashMap;
-
-import player.ai.eval.NumStoneEvaluation;
-
+import player.Player;
+import player.ai.eval.NumStoneEvaluator;
 import board.Board;
 import board.Position;
-import board.Turn;
 
-public class TranpositionEvaluationCompleteReadingSimpleAI extends TranpositionEvaluationSimpleAI {
+public class PerfectPlayWrapperPlayer extends Player {
+    private final AbstractAIPlayer originalPlayer;
     private final int completeReadingThreshold;
 
-    public TranpositionEvaluationCompleteReadingSimpleAI(Turn turn, int maxDepth, int completeReadingThreshold) {
-        super(turn, maxDepth);
+    public PerfectPlayWrapperPlayer(AbstractAIPlayer originalPlayer, int completeReadingThreshold) {
+        super(originalPlayer.getTurn());
+        this.originalPlayer = originalPlayer;
         this.completeReadingThreshold = completeReadingThreshold;
     }
 
@@ -20,13 +19,15 @@ public class TranpositionEvaluationCompleteReadingSimpleAI extends TranpositionE
     public Position play(Board board) {
         int restHand = 64 - board.countStones();
         System.out.println(restHand);
+
         if (restHand <= completeReadingThreshold) {
             long beginTime = System.currentTimeMillis();
-            Position p = eval(board, restHand, 5, turn.stone(), new HashMap<TranpositionTableKey, TranpositionTableValue>(), new NumStoneEvaluation(turn), -100, 100).getPosition();
+            Position p = originalPlayer.makeSearcher().eval(board, restHand, turn, new NumStoneEvaluator(turn)).getPosition();
             long endTime = System.currentTimeMillis();
             System.out.println("reading time = " + (endTime - beginTime) + " [ms]");
             return p;
         }
-        return super.play(board);
+
+        return originalPlayer.play(board);
     }
 }

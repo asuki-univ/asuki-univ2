@@ -8,36 +8,39 @@ import board.Board;
 import board.Stone;
 import board.Turn;
 
-public class LearnedEvaluation implements Evaluation {
+public class LearnedEvaluator implements Evaluator {
     private final Turn turn;
     private final WThorParams params;
 
-    public LearnedEvaluation(Turn turn, String filename) throws IOException {
+    public LearnedEvaluator(Turn turn, String filename) {
         this.turn = turn;
-        this.params = new WThorParams(filename);
+        try {
+            this.params = new WThorParams(filename);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private LearnedEvaluation(Turn turn, WThorParams params) {
+    private LearnedEvaluator(Turn turn, WThorParams params) {
         this.turn = turn;
         this.params = params;
     }
 
     @Override
-    public Evaluation clone() {
-        return new LearnedEvaluation(turn, params);
+    public Evaluator clone() {
+        return new LearnedEvaluator(turn, params);
     }
 
-    // TODO(mayah): int -> double
     @Override
-    public int score(Board board, Stone stone) {
+    public double score(Board board, Turn currentTurn) {
         WThorFeature feature = new WThorFeature();
         feature.collect(board);
         double score = feature.calculateScore(params);
 
-        if (turn == Turn.BLACK) {
-            return -(int)score; // TODO(mayah): We would like to return double.
+        if (currentTurn == Turn.BLACK) {
+            return score;
         } else {
-            return (int)score;
+            return -score;
         }
     }
 

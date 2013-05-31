@@ -1,20 +1,24 @@
 package board;
 
 public enum Stone {
-    EMPTY,
+    EMPTY() {
+        @Override
+        public Stone flip() { return EMPTY; }
+    },
     BLACK() {
         @Override
-        public Stone flip() { return Stone.WHITE; }
+        public Stone flip() { return WHITE; }
     },
     WHITE() {
         @Override
-        public Stone flip() { return Stone.BLACK; }
+        public Stone flip() { return BLACK; }
     },
-    WALL;
+    WALL() {
+        @Override
+        public Stone flip() { throw new RuntimeException("WALL cannot be flipped."); }
 
-    public Stone flip() {
-        assert(false);
-        throw new RuntimeException("Should not happen");
-    }
+    };
+
+    abstract public Stone flip();
 }
 

@@ -2,13 +2,13 @@ import game.Game;
 import game.Game.Winner;
 import player.Player;
 import player.ai.*;
-import player.ai.SimpleMonteCarloPlayer;
+import player.ai.impl.NegaScoutAdvancedAIPlayer;
 import board.Board;
 import board.Turn;
 
 public class EvalWinRate {
     private static final int GAME_COUNT = 100;
-    
+
     public static void main(String[] args) {
         //Player blackPlayer = new RandomPlayer(Turn.BLACK);
         Player blackPlayer = new SimpleMonteCarloPlayer(Turn.BLACK, 100);
@@ -24,14 +24,14 @@ public class EvalWinRate {
         //Player whitePlayer = new AlphaBetaSimpleAI(Turn.WHITE, 5);
         //Player whitePlayer = new AlphaBetaEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
         //Player whitePlayer = new NegaScoutEvaluationSimpleAI(Turn.WHITE, 5);
-        Player whitePlayer = new NegaScoutEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
+        Player whitePlayer = new NegaScoutAdvancedAIPlayer(Turn.WHITE, 5);
         //Player whitePlayer = new TranpositionEvaluationSimpleAI(Turn.WHITE, 5);
         //Player whitePlayer = new TranpositionEvaluationCompleteReadingSimpleAI(Turn.WHITE, 5, 15);
 
         int black = 0;
         int white = 0;
         int tie = 0;
-        
+
         Game game = new Game();
         for (int i = 0; i < GAME_COUNT; ++i) {
             Board board = new Board();
@@ -52,12 +52,12 @@ public class EvalWinRate {
             }
             System.out.println("winner: " + winner + " (at " + (i + 1) + ")");
         }
-        
+
         System.out.println("BLACK: " + blackPlayer.getClass().getSimpleName());
         System.out.println("WHITE: " + whitePlayer.getClass().getSimpleName());
         System.out.println("black: " + (double) black / GAME_COUNT);
         System.out.println("white: " + (double) white / GAME_COUNT);
         System.out.println("tie: " + (double) tie / GAME_COUNT);
     }
-    
+
 }
