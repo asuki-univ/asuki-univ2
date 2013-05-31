@@ -2,9 +2,6 @@ package lightsout;
 
 public class GaussianElimF2 {
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
         execute(createLMatrix(2));
         execute(createLMatrix(3));
@@ -12,6 +9,7 @@ public class GaussianElimF2 {
         execute(createLMatrix(5));
     }
 
+    // 行列 L_n の作成
     static int[][] createLMatrix(int n) {
         int[][] result = new int[n * n][n * n];
 
@@ -31,14 +29,20 @@ public class GaussianElimF2 {
         return result;
     }
 
+    // 処理全体
     static void execute(int[][] matrix) {
         System.out.println("L_" + (int) Math.sqrt(matrix.length));
         display(matrix);
+        
+        // 行列の右側に単位行列を付加する
         int[][] augmentedMatrix = augmentMatrix(matrix);
+        // 消去法を実行する
         eliminate(augmentedMatrix);
+        
         display(augmentedMatrix);
     }
 
+    // 右側へ単位行列の付加
     static int[][] augmentMatrix(int[][] matrix) {
         int size = matrix.length;
         int[][] result = new int[size][2 * size];
@@ -57,6 +61,7 @@ public class GaussianElimF2 {
         return result;
     }
 
+    // 掃き出し法の実行
     static void eliminate(int[][] matrix) {
         int rowIdx = 0;
 
@@ -72,6 +77,7 @@ public class GaussianElimF2 {
         }
     }
 
+    // pivot 行を探す
     static int findPivotIdx(int[][] matrix, int rowIdx, int colIdx) {
         for (int i = rowIdx; i < matrix.length; ++i) {
             if (matrix[i][colIdx] != 0) {
@@ -81,6 +87,7 @@ public class GaussianElimF2 {
         return -1;
     }
 
+    // 行を入れ替える
     static void swapRows(int[][] matrix, int pivotIdx, int rowIdx) {
         System.out.println("swap. pivotIdx: " + pivotIdx + ", rowIdx: " + rowIdx);
         if (pivotIdx == rowIdx)
@@ -91,6 +98,7 @@ public class GaussianElimF2 {
         matrix[pivotIdx] = tmp;
     }
 
+    // pivot 行以外の成分の消去
     static void eliminateOtherRows(int[][] matrix, int rowIdx, int colIdx) {
         for (int i = 0; i < matrix.length; ++i) {
             if (i == rowIdx)
@@ -104,6 +112,7 @@ public class GaussianElimF2 {
         display(matrix);
     }
 
+    // 行列の表示
     static void display(int[][] matrix) {
         for (int i = 0; i < matrix.length; ++i) {
             for (int j = 0; j < matrix[i].length; ++j) {
