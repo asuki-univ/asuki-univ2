@@ -4,7 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import board.Board;
 import board.Turn;
@@ -12,13 +14,14 @@ import board.Turn;
 public class WThorLearner {
     protected static final String WTHOR_PARAM_FILENAME = "params.dat";
 
-    protected List<MatchData> matchData;
-    protected int N;
+    private List<MatchData> matchData;
+    private int N;
+    private int[] featureOccurence;
 
-    protected WThorParams currentWThorParams;
-    protected WThorParams currentWThorDiff;
-    protected double currentFunctionValue;
-    protected double currentBeta;
+    private WThorParams currentWThorParams;
+    private WThorParams currentWThorDiff;
+    private double currentFunctionValue;
+    private double currentBeta;
 
     public WThorLearner(List<MatchData> matchData, WThorParams loadedWThorParamsIfAny) {
         this.matchData = matchData;
@@ -34,6 +37,19 @@ public class WThorLearner {
         for (MatchData data : matchData)
             currentFunctionValue += calculateDiff(currentWThorParams, currentWThorDiff, data) / N;
         currentFunctionValue += currentWThorParams.getSquareSumLambda();
+
+        featureOccurence = new int[WThorParams.ALL_PARAMS_SIZE];
+        WThorFeature feature = new WThorFeature();
+        // 各特徴量の出現数を数えておく。
+        for (MatchData data : matchData)
+            calculateOccurence(feature, data);
+
+        // 出現数が 50 以下のものは、50 とする。
+        for (int i = 0; i < WThorParams.ALL_PARAMS_SIZE; ++i) {
+            featureOccurence[i] = feature.get(i);
+            if (featureOccurence[i] < 50)
+                featureOccurence[i] = 50;
+        }
     }
 
     public WThorParams getParams() {
@@ -78,7 +94,7 @@ public class WThorLearner {
         return new WThorAlpha() {
             @Override
             public double alpha(int index) {
-                return currentBeta / (40 * matchData.size());
+                return currentBeta / featureOccurence[index];
             }
         };
     }
@@ -98,14 +114,10 @@ public class WThorLearner {
 
             int x = matchData.hands[i] % 10;
             int y = matchData.hands[i] / 10;
-
-            assert (1 <= x && x <= 8);
-            assert (1 <= y && y <= 8);
+            assert (1 <= x && x <= 8 && 1 <= y && y <= 8);
 
             // もしかすると、棋譜にはパスが含まれている可能性があるので、パスを処理しておく。
             if (!board.isPuttable(x, y, currentTurn.stone())) {
-                //System.out.printf("!!! : x, y = %d, %d\n", x, y);
-                //System.out.println(board.toString());
                 currentTurn = currentTurn.flip();
             }
 
@@ -122,8 +134,8 @@ public class WThorLearner {
             double estimatedScore = feature.calculateScore(params);
             double e = matchData.theoreticalScore - estimatedScore;
             sumDiff2 += e * e;
-            for (Integer j : feature.featureIndices)
-                diff.add(j, e);
+            for (Entry<Integer, Integer> entry : feature.features.entrySet())
+                diff.add(entry.getKey(), e * entry.getValue());
 
             currentTurn = currentTurn.flip();
         }
@@ -131,9 +143,45 @@ public class WThorLearner {
         return sumDiff2;
     }
 
+    private void calculateOccurence(WThorFeature feature, MatchData matchData) {
+        // matchData は、４０手目までを用いる。
+        Board board = new Board();
+        Turn currentTurn = Turn.BLACK;
+
+        for (int i = 0; i < 40; ++i) {
+            if (matchData.hands[i] == 0)
+                break;
+
+            int x = matchData.hands[i] % 10;
+            int y = matchData.hands[i] / 10;
+
+            assert (1 <= x && x <= 8);
+            assert (1 <= y && y <= 8);
+
+            // もしかすると、棋譜にはパスが含まれている可能性があるので、パスを処理しておく。
+            if (!board.isPuttable(x, y, currentTurn.stone()))
+                currentTurn = currentTurn.flip();
+
+            board.put(x, y, currentTurn.stone());
+            feature.collect(board);
+
+            currentTurn = currentTurn.flip();
+        }
+    }
+
     public static void main(String[] args) throws Exception {
-        InputStream in = new BufferedInputStream(new FileInputStream(new File("wth/WTH_2004.wtb")));
-        List<MatchData> matchData = WThorParser.parse(in);
+        String[] filenames = new String[] {
+                "wth/WTH_2000.wtb", "wth/WTH_2001.wtb", "wth/WTH_2002.wtb", "wth/WTH_2003.wtb", "wth/WTH_2004.wtb",
+                "wth/WTH_2005.wtb", "wth/WTH_2006.wtb", "wth/WTH_2007.wtb", "wth/WTH_2008.wtb", "wth/WTH_2009.wtb",
+                "wth/WTH_2010.wtb", "wth/WTH_2011.wtb", "wth/WTH_2012.wtb",
+        };
+
+        List<MatchData> matchData = new ArrayList<MatchData>();
+        for (String filename : filenames) {
+            InputStream in = new BufferedInputStream(new FileInputStream(new File(filename)));
+            matchData.addAll(WThorParser.parse(in));
+        }
+
         System.out.println("results.size() = " + matchData.size());
 
         WThorParams loadedParams = new File(WTHOR_PARAM_FILENAME).exists() ? new WThorParams(WTHOR_PARAM_FILENAME) : null;

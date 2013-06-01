@@ -1,18 +1,25 @@
 package wthor;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import board.Board;
 import board.Stone;
 
 public class WThorFeature {
-    ArrayList<Integer> featureIndices = new ArrayList<Integer>();
+    Map<Integer, Integer> features = new HashMap<>();
 
     public double calculateScore(WThorParams params) {
         double score = 0;
-        for (Integer i : featureIndices)
-            score += params.get(i);
+        for (Map.Entry<Integer, Integer> entry : features.entrySet())
+            score += params.get(entry.getKey()) * entry.getValue();
+
         return score;
+    }
+
+    public int get(int index) {
+        Integer v = features.get(index);
+        return v != null ? v : 0;
     }
 
     public void collect(Board board) {
@@ -23,16 +30,24 @@ public class WThorFeature {
         addEdge2x(board);
     }
 
+    private void add(int index) {
+        if (features.containsKey(index)) {
+            features.put(index, features.get(index) + 1);
+        } else {
+            features.put(index, 1);
+        }
+    }
+
     private void addLength8(Board board) {
         for (int x = 1; x <= Board.WIDTH; ++x) {
             Stone[] s = board.getVertical(x);
-            featureIndices.add(index(s) + WThorParams.LENGTH8_OFFSET);
-            featureIndices.add(reverseIndex(s) + WThorParams.LENGTH8_OFFSET);
+            add(index(s) + WThorParams.LENGTH8_OFFSET);
+            add(reverseIndex(s) + WThorParams.LENGTH8_OFFSET);
         }
         for (int y = 1; y <= Board.HEIGHT; ++y) {
             Stone[] s = board.getHorizontal(y);
-            featureIndices.add(index(s) + WThorParams.LENGTH8_OFFSET);
-            featureIndices.add(reverseIndex(s) + WThorParams.LENGTH8_OFFSET);
+            add(index(s) + WThorParams.LENGTH8_OFFSET);
+            add(reverseIndex(s) + WThorParams.LENGTH8_OFFSET);
         }
     }
 
@@ -67,8 +82,8 @@ public class WThorFeature {
             }
 
             for (int i = 0; i < 4; ++i) {
-                featureIndices.add(index(diags[i]) + offset);
-                featureIndices.add(reverseIndex(diags[i]) + offset);
+                add(index(diags[i]) + offset);
+                add(reverseIndex(diags[i]) + offset);
             }
         }
 
@@ -79,10 +94,10 @@ public class WThorFeature {
             whiteLine[i] = board.get(i + 1, i + 1);
         }
 
-        featureIndices.add(index(blackLine) + WThorParams.DIAG8_OFFSET);
-        featureIndices.add(reverseIndex(blackLine) + WThorParams.DIAG8_OFFSET);
-        featureIndices.add(index(whiteLine) + WThorParams.DIAG8_OFFSET);
-        featureIndices.add(reverseIndex(whiteLine) + WThorParams.DIAG8_OFFSET);
+        add(index(blackLine) + WThorParams.DIAG8_OFFSET);
+        add(reverseIndex(blackLine) + WThorParams.DIAG8_OFFSET);
+        add(index(whiteLine) + WThorParams.DIAG8_OFFSET);
+        add(reverseIndex(whiteLine) + WThorParams.DIAG8_OFFSET);
     }
 
     private void addCorner33(Board board) {
@@ -101,7 +116,7 @@ public class WThorFeature {
         }
 
         for (int i = 0; i < 8; ++i)
-            featureIndices.add(index(corners[i]) + WThorParams.CORNER33_OFFSET);
+            add(index(corners[i]) + WThorParams.CORNER33_OFFSET);
     }
 
     private void addCorner25(Board board) {
@@ -122,7 +137,7 @@ public class WThorFeature {
         }
 
         for (int i = 0; i < 8; ++i)
-            featureIndices.add(index(corners[i]) + WThorParams.CORNER25_OFFSET);
+            add(index(corners[i]) + WThorParams.CORNER25_OFFSET);
     }
 
     // 1 2 3 4 7 8 9 10
@@ -147,8 +162,8 @@ public class WThorFeature {
         };
 
         for (int i = 0; i < 4; ++i) {
-            featureIndices.add(index(ss[i]) + WThorParams.EDGE2X_OFFSET);
-            featureIndices.add(reverseIndex(ss[i]) + WThorParams.EDGE2X_OFFSET);
+            add(index(ss[i]) + WThorParams.EDGE2X_OFFSET);
+            add(reverseIndex(ss[i]) + WThorParams.EDGE2X_OFFSET);
         }
     }
 

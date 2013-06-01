@@ -1,8 +1,11 @@
 package game.cui;
 import player.Player;
+import player.ai.PerfectPlayWrapperPlayer;
 import player.ai.impl.AlphaBetaLearnedAIPlayer;
 import player.ai.impl.NegaMaxAdvancedAIPlayer;
 import player.ai.impl.NegaMaxBoardScoreAIPlayer;
+import player.ai.impl.NegaScoutAdvancedAIPlayer;
+import player.ai.impl.NegaScoutLearnedAIPlayer;
 import player.ai.simple.MinMaxSimpleAIPlayer;
 import player.ai.simple.NegaMaxSimpleAIPlayer;
 import board.Board;
@@ -21,12 +24,14 @@ public class Main {
         //Player blackPlayer = new HumanPlayer(Turn.BLACK);
         //Player blackPlayer = new SimpleAI(Turn.BLACK);
         //Player blackPlayer = new MinMaxSimpleAIPlayer(Turn.BLACK, 5);
-        Player blackPlayer = new NegaMaxBoardScoreAIPlayer(Turn.BLACK, 5);
+        //Player blackPlayer = new NegaMaxBoardScoreAIPlayer(Turn.BLACK, 5);
+        Player blackPlayer = new PerfectPlayWrapperPlayer(new NegaScoutAdvancedAIPlayer(Turn.BLACK, 7), 15);
         // Player blackPlayer = new AlphaBetaSimpleAI(Turn.BLACK, 5);
         // Player blackPlayer = new LearnedAI(turn, 9, 15);
         //Player whitePlayer = new SimpleAI(Turn.WHITE);
         //Player whitePlayer = new MinMaxSimpleAIPlayer(Turn.WHITE, 5);
-        Player whitePlayer = new NegaMaxSimpleAIPlayer(Turn.WHITE, 5);
+        //Player whitePlayer = new NegaMaxSimpleAIPlayer(Turn.WHITE, 5);
+        Player whitePlayer = new PerfectPlayWrapperPlayer(new NegaScoutLearnedAIPlayer(Turn.WHITE, 7), 15);
         //Player whitePlayer = new NegaMaxBoardScoreAIPlayer(Turn.WHITE, 5);
         //Player whitePlayer = new NegaMaxAdvancedAI(Turn.WHITE, 5);
         //Player whitePlayer = new AlphaBetaSimpleAI(Turn.WHITE, 5);

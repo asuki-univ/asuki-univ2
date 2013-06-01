@@ -39,7 +39,7 @@ public class NegaScoutSearcher implements Searcher {
             b.put(p.x, p.y, currentTurn.stone());
 
             double a = Math.max(alpha, maxScore);
-            double score = -eval(b, restDepth - 1, currentTurn.flip(), e, -(a+1), -a).getScore();
+            double score = -eval(b, restDepth - 1, currentTurn.flip(), e, -(a + 1), -a).getScore();
             if (a < score && score < beta) {
                 e = evaluator.clone();
                 e.willPut(board, p.x, p.y, currentTurn.stone());

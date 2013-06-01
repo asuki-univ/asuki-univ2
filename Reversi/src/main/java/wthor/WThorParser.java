@@ -18,14 +18,11 @@ class MatchData {
 public class WThorParser {
     public static List<MatchData> parse(InputStream in) throws IOException {
         List<MatchData> results = new ArrayList<MatchData>();
-
         int numMatches = readHeader(in);
-
         System.out.println(numMatches);
 
-        for (int i = 0; i < numMatches; ++i) {
+        for (int i = 0; i < numMatches; ++i)
             results.add(readMatchData(in));
-        }
 
         return results;
     }

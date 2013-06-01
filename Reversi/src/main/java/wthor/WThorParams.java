@@ -35,9 +35,9 @@ public class WThorParams {
 
     public static final int ALL_PARAMS_SIZE = EDGE2X_OFFSET + EDGE2X_SIZE;
 
-    private static double LAMBDA = 0.04;
-
     private double[] values = new double[ALL_PARAMS_SIZE];
+
+    private static double LAMBDA = 0.04;
     private double squareSum = 0;
 
     public WThorParams() {
@@ -45,8 +45,6 @@ public class WThorParams {
 
     public WThorParams(String filename) throws IOException {
         load(filename);
-
-        squareSum = 0;
         for (int i = 0; i < ALL_PARAMS_SIZE; ++i)
             squareSum += values[i] * values[i];
     }
