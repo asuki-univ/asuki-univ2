@@ -51,39 +51,54 @@ public class FixedStones {
     }
 
     private static int[] calculate() {
-        int[] result = new int[6561]; // (3 ** 8)
-        for (int i = 0; i < 6561; ++i) {
-            Board board = fromInt(i);
-            result[i] = calculateIter(board, 1);
-        }
+        int[] result = new int[6561]; // (3 ** 8) = 6561
+        for (int i = 0; i < 6561; ++i)
+            result[i] = -1;
+
+        for (int i = 0; i < 6561; ++i)
+            result[i] = calculateIter(i, result);
 
         return result;
     }
 
-    private static int calculateIter(Board board, int x) {
-        if (Board.WIDTH < x) {
-            int numBlackStone = 0;
-            for (int i = 1; i <= Board.WIDTH; ++i) {
-                if (Stone.BLACK.equals(board.get(i, 1)))
-                    ++numBlackStone;
-            }
+    private static int calculateIter(int ith, int[] visited) {
+        if (visited[ith] >= 0)
+            return visited[ith];
 
-            return numBlackStone;
+        // 盤の１行目を利用して探索する。
+        Board board = fromInt(ith);
+
+        boolean foundEmpty = false;
+        int result = 100;
+        for (int x = 1; x <= Board.WIDTH; ++x) {
+            if (!Stone.EMPTY.equals(board.get(x, 1)))
+                continue;
+
+            foundEmpty = true;
+
+            // 黒石をおいた場合と白石を置いた場合のうち、少ないほうが採用される。
+            Board b = board.clone();
+            b.put(x, 1, Stone.BLACK);
+            result = Math.min(result, calculateIter(toInt(b.getHorizontal(1)), visited));
+
+            b = board.clone();
+            b.put(x, 1, Stone.WHITE);
+            result = Math.min(result, calculateIter(toInt(b.getHorizontal(1)), visited));
         }
 
-        if (!Stone.EMPTY.equals(board.get(x, 1)))
-            return calculateIter(board, x + 1);
+        if (foundEmpty) {
+            visited[ith] = result;
+            return result;
+        }
 
-        // 黒石をおいた場合と白石を置いた場合のうち、少ないほうが採用される。
-        Board b = board.clone();
-        b.put(x, 1, Stone.BLACK);
-        int blackResult = calculateIter(b, x + 1);
+        int numBlackStone = 0;
+        for (int i = 1; i <= Board.WIDTH; ++i) {
+            if (Stone.BLACK.equals(board.get(i, 1)))
+                ++numBlackStone;
+        }
 
-        b = board.clone();
-        b.put(x, 1, Stone.WHITE);
-        int whiteResult = calculateIter(b, x + 1);
-
-        return Math.min(blackResult, whiteResult);
+        visited[ith] = numBlackStone;
+        return numBlackStone;
     }
 
     static Board fromInt(int idx) {

@@ -75,4 +75,20 @@ public class FixedStonesTest {
         assertThat(FixedStones.getNumFixedStones(board, Stone.BLACK), is(2));
         assertThat(FixedStones.getNumFixedStones(board, Stone.WHITE), is(1));
     }
+
+    @Test
+    public void testBoard5() {
+        Board board = new BoardParser().parse(
+                "W..WWWBW" +
+                "........" +
+                "........" +
+                "........" +
+                "........" +
+                "........" +
+                "........" +
+                "........");
+
+        assertThat(FixedStones.getNumFixedStones(board, Stone.BLACK), is(0));
+        assertThat(FixedStones.getNumFixedStones(board, Stone.WHITE), is(2));
+    }
 }
