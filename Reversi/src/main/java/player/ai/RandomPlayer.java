@@ -23,7 +23,6 @@ public class RandomPlayer extends Player {
             int x = random.nextInt(Board.WIDTH) + 1;
             int y = random.nextInt(Board.HEIGHT) + 1;
             if (!board.isPuttable(x, y, turn.stone())) {
-                //System.out.println("Invalid.");
                 continue;
             }
 
