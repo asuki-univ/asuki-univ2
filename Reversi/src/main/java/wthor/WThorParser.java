@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class MatchData {
-    public int theoreticalScore;   // 終盤39手目以降(多分)が最善と仮定した場合の理論スコア
+    public int theoreticalScore;   // 終盤40手目以降が最善と仮定した場合の理論スコア
     public int[] hands;
 
     public MatchData(int theoreticalScore, int[] hands) {

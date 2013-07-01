@@ -34,10 +34,10 @@ public class WThorParams {
     public static final int EDGE2X_OFFSET   = CORNER25_OFFSET + CORNER25_SIZE;
 
     public static final int ALL_PARAMS_SIZE = EDGE2X_OFFSET + EDGE2X_SIZE;
+    public static final double LAMBDA = 0.04;
 
     private double[] values = new double[ALL_PARAMS_SIZE];
 
-    private static double LAMBDA = 0.04;
     private double squareSum = 0;
 
     public WThorParams() {
@@ -65,23 +65,6 @@ public class WThorParams {
         squareSum -= values[index] * values[index];
         values[index] = value;
         squareSum += values[index] * values[index];
-    }
-
-    public void ensureMinValue(double minValue) {
-        for (int i = 0; i < ALL_PARAMS_SIZE; ++i) {
-            if (values[i] < minValue)
-                set(i, minValue);
-        }
-    }
-
-    public WThorParams makeWThorParamByAdding(WThorParams diff, WThorAlpha alpha) {
-        WThorParams result = new WThorParams();
-        for (int i = 0; i < ALL_PARAMS_SIZE; ++i) {
-            double value = this.values[i] + 2 * alpha.alpha(i) * diff.values[i] - 2 * this.values[i] * alpha.alpha(i) * LAMBDA;
-            result.set(i, value);
-        }
-
-        return result;
     }
 
     public void save(String filename) throws IOException {

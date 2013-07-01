@@ -147,18 +147,16 @@ public class Board extends BoardBase implements Cloneable {
 
     public Stone[] getHorizontal(int y) {
         Stone[] stones = new Stone[WIDTH];
-        for (int i = 0; i < WIDTH; ++i) {
-            stones[i] = get(i + 1, y);
-        }
+        for (int i = 1; i <= WIDTH; ++i)
+            stones[i - 1] = get(i, y);
 
         return stones;
     }
 
     public Stone[] getVertical(int x) {
         Stone[] stones = new Stone[HEIGHT];
-        for (int i = 0; i < HEIGHT; ++i) {
-            stones[i] = get(x, i + 1);
-        }
+        for (int i = 1; i <= HEIGHT; ++i)
+            stones[i - 1] = get(x, i);
 
         return stones;
     }

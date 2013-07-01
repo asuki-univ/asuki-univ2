@@ -25,36 +25,36 @@ public class WThorFeatureTest {
         WThorFeature feature = new WThorFeature();
         feature.collect(board);
 
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("WWW.....B")) + WThorParams.CORNER33_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("W..W..W.B")) + WThorParams.CORNER33_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("WWW.....B")) + WThorParams.CORNER33_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("W..W..W.B")) + WThorParams.CORNER33_OFFSET));
 
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("WWW.B...B.")) + WThorParams.CORNER25_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("W...BW..W.")) + WThorParams.CORNER25_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("WWW.B...B.")) + WThorParams.CORNER25_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("W...BW..W.")) + WThorParams.CORNER25_OFFSET));
 
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("WWW.B...")) + WThorParams.LENGTH8_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("...B.WWW")) + WThorParams.LENGTH8_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("W...B...")) + WThorParams.LENGTH8_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("...B...W")) + WThorParams.LENGTH8_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("WWW.B...")) + WThorParams.LENGTH8_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("...B.WWW")) + WThorParams.LENGTH8_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("W...B...")) + WThorParams.LENGTH8_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("...B...W")) + WThorParams.LENGTH8_OFFSET));
 
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("W.B..W..")) + WThorParams.DIAG8_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("..W..B.W")) + WThorParams.DIAG8_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("........")) + WThorParams.DIAG8_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("W.B..W..")) + WThorParams.DIAG8_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("..W..B.W")) + WThorParams.DIAG8_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("........")) + WThorParams.DIAG8_OFFSET));
 
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("B..B")) + WThorParams.DIAG4_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("....")) + WThorParams.DIAG4_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("B..B")) + WThorParams.DIAG4_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("....")) + WThorParams.DIAG4_OFFSET));
 
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("BWBBB")) + WThorParams.DIAG5_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("BBBWB")) + WThorParams.DIAG5_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("BWWBB")) + WThorParams.DIAG5_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("BBWWB")) + WThorParams.DIAG5_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("BWBBB")) + WThorParams.DIAG5_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("BBBWB")) + WThorParams.DIAG5_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("BWWBB")) + WThorParams.DIAG5_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("BBWWB")) + WThorParams.DIAG5_OFFSET));
 
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("WBBWB.")) + WThorParams.DIAG6_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray(".BWBBW")) + WThorParams.DIAG6_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("WBBWB.")) + WThorParams.DIAG6_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray(".BWBBW")) + WThorParams.DIAG6_OFFSET));
 
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("W......")) + WThorParams.DIAG7_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("......W")) + WThorParams.DIAG7_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("..W....")) + WThorParams.DIAG7_OFFSET));
-        assertTrue(feature.featureIndices.contains(WThorFeature.index(toStoneArray("....W..")) + WThorParams.DIAG7_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("W......")) + WThorParams.DIAG7_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("......W")) + WThorParams.DIAG7_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("..W....")) + WThorParams.DIAG7_OFFSET));
+        assertTrue(feature.features.containsKey(WThorFeature.index(toStoneArray("....W..")) + WThorParams.DIAG7_OFFSET));
     }
 
     private static Stone[] toStoneArray(String str) {

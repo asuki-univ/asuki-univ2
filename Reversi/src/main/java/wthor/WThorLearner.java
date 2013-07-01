@@ -1,10 +1,5 @@
 package wthor;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -12,33 +7,35 @@ import board.Board;
 import board.Turn;
 
 public class WThorLearner {
-    protected static final String WTHOR_PARAM_FILENAME = "params.dat";
-
     private List<MatchData> matchData;
     private int N;
-    private int[] featureOccurence;
+    private int[] featureOccurence;             // 各特徴が現れた回数
 
-    private WThorParams currentWThorParams;
-    private WThorParams currentWThorDiff;
-    private double currentFunctionValue;
-    private double currentBeta;
+    private WThorParams currentWThorParams;     // 現在の重みベクトル
+    private WThorParams currentWThorDiff;       // 現在の二乗誤差の和
+    private double currentFunctionValue;        // 目的関数の値
+    private double currentBeta;                 // 現在の beta 値
 
-    public WThorLearner(List<MatchData> matchData, WThorParams loadedWThorParamsIfAny) {
+    public WThorLearner(List<MatchData> matchData, WThorParams initialWThorParams) {
         this.matchData = matchData;
         this.N = matchData.size() * 40;
 
-        if (loadedWThorParamsIfAny != null)
-            currentWThorParams = loadedWThorParamsIfAny;
-        else
-            currentWThorParams = new WThorParams();
+        currentWThorParams = initialWThorParams;
         currentWThorDiff = new WThorParams();
         currentBeta = 0.00002;
+
+        // 目的関数の値を計算
         currentFunctionValue = 0;
         for (MatchData data : matchData)
             currentFunctionValue += calculateDiff(currentWThorParams, currentWThorDiff, data) / N;
         currentFunctionValue += currentWThorParams.getSquareSumLambda();
 
-        featureOccurence = new int[WThorParams.ALL_PARAMS_SIZE];
+        // 特徴量の出現数を数えておく
+        featureOccurence = countFeatureOccurence();
+    }
+
+    private int[] countFeatureOccurence() {
+        int[] featureOccurrence = new int[WThorParams.ALL_PARAMS_SIZE];
         WThorFeature feature = new WThorFeature();
         // 各特徴量の出現数を数えておく。
         for (MatchData data : matchData)
@@ -50,12 +47,11 @@ public class WThorLearner {
             if (featureOccurence[i] < 50)
                 featureOccurence[i] = 50;
         }
+
+        return featureOccurrence;
     }
 
-    public WThorParams getParams() {
-        return currentWThorParams;
-    }
-
+    // times回最急降下法を適用する
     public void run(int times) {
         for (int i = 0; i < times; ++i) {
             System.out.println("Iteration : " + i + " : beta = " + currentBeta);
@@ -64,22 +60,16 @@ public class WThorLearner {
     }
 
     private void step() {
-        WThorAlpha alpha = makeAlpha();
-
-        WThorParams nextWThorParams = currentWThorParams.makeWThorParamByAdding(currentWThorDiff, alpha);
+        // 新しい重みベクトルを作成し、その値で目的関数の値を計算s
+        WThorParams nextWThorParams = makeWThorParamByAdding(currentWThorParams, currentWThorDiff);
         WThorParams nextWThorDiff = new WThorParams();
         double nextFunctionValue = 0;
         for (MatchData data : matchData)
             nextFunctionValue += calculateDiff(nextWThorParams, nextWThorDiff, data) / N;
         nextFunctionValue += nextWThorParams.getSquareSumLambda();
 
-        System.out.printf("(curr) f(w) : %.3f + %.3f = %.3f\n",
-                currentFunctionValue - currentWThorParams.getSquareSumLambda(), currentWThorParams.getSquareSumLambda(), currentFunctionValue);
-        System.out.printf("(next) f(w) : %.3f + %.3f = %.3f\n",
-                nextFunctionValue - nextWThorParams.getSquareSumLambda(), nextWThorParams.getSquareSumLambda(), nextFunctionValue);
-
         if (nextFunctionValue < currentFunctionValue) {
-            // より良い方向にアップデートされたので、これを使おう。beta も少し大きくしてみる。
+            // より良い方向にアップデートされたので、これを使う。beta も少し大きくしてみる。
             currentWThorParams = nextWThorParams;
             currentWThorDiff = nextWThorDiff;
             currentFunctionValue = nextFunctionValue;
@@ -90,15 +80,18 @@ public class WThorLearner {
         }
     }
 
-    protected WThorAlpha makeAlpha() {
-        return new WThorAlpha() {
-            @Override
-            public double alpha(int index) {
-                return currentBeta / featureOccurence[index];
-            }
-        };
+    private WThorParams makeWThorParamByAdding(WThorParams params, WThorParams diff) {
+        WThorParams result = new WThorParams();
+        for (int i = 0; i < WThorParams.ALL_PARAMS_SIZE; ++i) {
+            double alpha = currentBeta / featureOccurence[i];
+            double value = params.get(i) + 2 * alpha * diff.get(i) - 2 * params.get(i) * alpha * WThorParams.LAMBDA;
+            result.set(i, value);
+        }
+
+        return result;
     }
 
+    // 現在の重みベクトル params,
     private static double calculateDiff(WThorParams params, WThorParams diff, MatchData matchData) {
         // matchData は、４０手目までを用いる。
         Board board = new Board();
@@ -130,7 +123,7 @@ public class WThorLearner {
             WThorFeature feature = new WThorFeature();
             feature.collect(board);
 
-            // ここまでで、特徴量が集まった。e を足していく。
+            // ここまでで、特徴量が集まった。誤差を足していく。
             double estimatedScore = feature.calculateScore(params);
             double e = matchData.theoreticalScore - estimatedScore;
             sumDiff2 += e * e;
@@ -169,25 +162,7 @@ public class WThorLearner {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        String[] filenames = new String[] {
-                "wth/WTH_2000.wtb", "wth/WTH_2001.wtb", "wth/WTH_2002.wtb", "wth/WTH_2003.wtb", "wth/WTH_2004.wtb",
-                "wth/WTH_2005.wtb", "wth/WTH_2006.wtb", "wth/WTH_2007.wtb", "wth/WTH_2008.wtb", "wth/WTH_2009.wtb",
-                "wth/WTH_2010.wtb", "wth/WTH_2011.wtb", "wth/WTH_2012.wtb",
-        };
-
-        List<MatchData> matchData = new ArrayList<MatchData>();
-        for (String filename : filenames) {
-            InputStream in = new BufferedInputStream(new FileInputStream(new File(filename)));
-            matchData.addAll(WThorParser.parse(in));
-        }
-
-        System.out.println("results.size() = " + matchData.size());
-
-        WThorParams loadedParams = new File(WTHOR_PARAM_FILENAME).exists() ? new WThorParams(WTHOR_PARAM_FILENAME) : null;
-
-        WThorLearner learner = new WThorLearner(matchData, loadedParams);
-        learner.run(100);
-        learner.getParams().save(WTHOR_PARAM_FILENAME);
+    public WThorParams getParams() {
+        return currentWThorParams;
     }
 }

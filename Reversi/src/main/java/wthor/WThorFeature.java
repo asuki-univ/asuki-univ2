@@ -52,6 +52,14 @@ public class WThorFeature {
     }
 
     private void addDiags(Board board) {
+        final int[] offset = new int[] {
+                0, 0, 0, 0,
+                WThorParams.DIAG4_OFFSET,
+                WThorParams.DIAG5_OFFSET,
+                WThorParams.DIAG6_OFFSET,
+                WThorParams.DIAG7_OFFSET,
+        };
+
         for (int diagSize = 4; diagSize <= 7; ++diagSize) {
             Stone[][] diags = new Stone[4][diagSize];
             for (int i = 0; i < diagSize; ++i) {
@@ -61,29 +69,9 @@ public class WThorFeature {
                 diags[3][i] = board.get(9 - diagSize + i, 8 - i);
             }
 
-            // TODO: We should have better solution here.
-            final int offset;
-            switch (diagSize) {
-            case 4:
-                offset = WThorParams.DIAG4_OFFSET;
-                break;
-            case 5:
-                offset = WThorParams.DIAG5_OFFSET;
-                break;
-            case 6:
-                offset = WThorParams.DIAG6_OFFSET;
-                break;
-            case 7:
-                offset = WThorParams.DIAG7_OFFSET;
-                break;
-            default:
-                assert(false);
-                throw new RuntimeException("Shouldn't happen");
-            }
-
             for (int i = 0; i < 4; ++i) {
-                add(index(diags[i]) + offset);
-                add(reverseIndex(diags[i]) + offset);
+                add(index(diags[i]) + offset[diagSize]);
+                add(reverseIndex(diags[i]) + offset[diagSize]);
             }
         }
 
