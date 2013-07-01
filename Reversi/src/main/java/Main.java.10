@@ -1,0 +1,24 @@
+import game.Game;
+import game.Game.Winner;
+import player.Player;
+import player.ai.RandomPlayer;
+import player.ai.impl.AlphaBetaBoardScoreAIPlayer;
+import board.Board;
+import board.Turn;
+
+public class Main {
+    public static void main(String[] args) {
+        Player blackPlayer = new RandomPlayer(Turn.BLACK);
+        Player whitePlayer = new AlphaBetaBoardScoreAIPlayer(Turn.WHITE, 5);
+
+        Game game = new Game();
+        Board board = new Board();
+        board.setup();
+        Winner winner = game.play(blackPlayer, whitePlayer, board, Turn.BLACK, true);
+
+        System.out.println("BLACK: " + blackPlayer.getClass().getSimpleName());
+        System.out.println("WHITE: " + whitePlayer.getClass().getSimpleName());
+        System.out.println("Winner: " + winner);
+    }
+
+}
