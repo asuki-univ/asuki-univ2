@@ -29,14 +29,15 @@ public class NFABuilder {
     private NFA buildFromChar(RegexTermCharacter term) {
         NFANode beginNode = new NFANode(false);
         NFANode endNode = new NFANode(true);
-        beginNode.addEdge(endNode, Label.newCharLabel(term.getChar()));
+        beginNode.addEdge(term.getChar(), endNode);
 
         return new NFA(beginNode, endNode);
     }
 
     public NFA buildFromOption(RegexTermOption term) {
         NFA am = build(term.getTerm());
-        am.getBeginNode().addEdge(am.getEndNode(), Label.newEpsilonLabel());
+        am.getBeginNode().addEpsilonEdge(am.getEndNode());
+
         return am;
     }
 
@@ -49,10 +50,11 @@ public class NFABuilder {
 
         am1.getEndNode().setFinal(false);
         am2.getEndNode().setFinal(false);
-        beginNode.addEdge(am1.getBeginNode(), Label.newEpsilonLabel());
-        beginNode.addEdge(am2.getBeginNode(), Label.newEpsilonLabel());
-        am1.getEndNode().addEdge(endNode, Label.newEpsilonLabel());
-        am2.getEndNode().addEdge(endNode, Label.newEpsilonLabel());
+
+        beginNode.addEpsilonEdge(am1.getBeginNode());
+        beginNode.addEpsilonEdge(am2.getBeginNode());
+        am1.getEndNode().addEpsilonEdge(endNode);
+        am2.getEndNode().addEpsilonEdge(endNode);
 
         return new NFA(beginNode, endNode);
     }
@@ -62,15 +64,15 @@ public class NFABuilder {
         NFA am2 = build(term.getRightTerm());
 
         am1.getEndNode().setFinal(false);
-        am1.getEndNode().addEdge(am2.getBeginNode(), Label.newEpsilonLabel());
+        am1.getEndNode().addEpsilonEdge(am2.getBeginNode());
 
         return new NFA(am1.getBeginNode(), am2.getEndNode());
     }
 
     public NFA buildFromStar(RegexTermStar term) {
         NFA am = build(term.getTerm());
-        am.getBeginNode().addEdge(am.getEndNode(), Label.newEpsilonLabel());
-        am.getEndNode().addEdge(am.getBeginNode(), Label.newEpsilonLabel());
+        am.getBeginNode().addEpsilonEdge(am.getEndNode());
+        am.getEndNode().addEpsilonEdge(am.getBeginNode());
 
         return am;
     }

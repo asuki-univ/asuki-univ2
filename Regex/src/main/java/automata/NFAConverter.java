@@ -3,6 +3,7 @@ package automata;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -31,18 +32,15 @@ public class NFAConverter {
 
             Map<Character, Set<NFANode>> labelToPowerset = new HashMap<Character, Set<NFANode>>();
             for (NFANode n : powerset) {
-                for (NFAEdge e : n.getEdges()) {
-                    if (e.getLabel().isEmpty())
-                        continue;
-
-                    if (labelToPowerset.containsKey(e.getLabel().getChar())) {
-                        Set<NFANode> nodes = labelToPowerset.get(e.getLabel().getChar());
-                        nodes.addAll(getNodesWithEpsilonTransition(e.getDestination()));
-                    } else {
-                        Set<NFANode> nodes = new HashSet<NFANode>();
-                        nodes.addAll(getNodesWithEpsilonTransition(e.getDestination()));
-                        labelToPowerset.put(e.getLabel().getChar(), nodes);
+                for (Entry<Character, List<NFANode>> e : n.getEdges().entrySet()) {
+                    Set<NFANode> nodes = labelToPowerset.get(e.getKey());
+                    if (nodes == null) {
+                        nodes = new HashSet<NFANode>();
+                        labelToPowerset.put(e.getKey(), nodes);
                     }
+
+                    for (NFANode dest : e.getValue())
+                        nodes.addAll(getNodesWithEpsilonTransition(dest));
                 }
             }
 
@@ -76,19 +74,19 @@ public class NFAConverter {
     // node からイプシロン遷移できるノードの集合を返す。自身も含む。
     private static Set<NFANode> getNodesWithEpsilonTransition(NFANode node) {
         Set<NFANode> visited = new HashSet<NFANode>();
-        visited.add(node);
         Queue<NFANode> q = new ArrayDeque<NFANode>();
+
+        visited.add(node);
         q.add(node);
 
         while (!q.isEmpty()) {
             NFANode n = q.remove();
-            for (NFAEdge edge : n.getEdges()) {
-                if (!edge.getLabel().isEmpty())
+            for (NFANode dest : n.getEpsilonEdgeDestinations()) {
+                if (visited.contains(dest))
                     continue;
-                if (visited.contains(edge.getDestination()))
-                    continue;
-                q.add(edge.getDestination());
-                visited.add(edge.getDestination());
+
+                q.add(dest);
+                visited.add(dest);
             }
         }
 

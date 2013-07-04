@@ -2,14 +2,19 @@ package automata;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NFANode {
-    private List<NFAEdge> edges;
+    private Map<Character, List<NFANode>> edges;
+    private List<NFANode> epsilonEdgeDestinations;
+
     private boolean isFinal;
 
     public NFANode(boolean isFinal) {
-        this.edges = new ArrayList<NFAEdge>();
+        this.edges = new HashMap<Character, List<NFANode>>();
+        this.epsilonEdgeDestinations = new ArrayList<NFANode>();
         this.isFinal = isFinal;
     }
 
@@ -21,57 +26,33 @@ public class NFANode {
         this.isFinal = flag;
     }
 
-    public void addEdge(NFANode node, Label label) {
-        edges.add(new NFAEdge(node, label));
+    public void addEdge(char c, NFANode node) {
+        List<NFANode> es = edges.get(c);
+        if (es == null) {
+            es = new ArrayList<NFANode>();
+            edges.put(c, es);
+        }
+
+        es.add(node);
     }
 
-    public List<NFAEdge> getEdges() {
-        return Collections.unmodifiableList(edges);
-    }
-}
-
-class NFAEdge {
-    private NFANode dest;
-    private Label label;
-
-    public NFAEdge(NFANode dest, Label label) {
-        this.dest = dest;
-        this.label = label;
+    public void addEpsilonEdge(NFANode node) {
+        epsilonEdgeDestinations.add(node);
     }
 
-    public NFANode getDestination() {
-        return dest;
+    public List<NFANode> getDestinations(char c) {
+        List<NFANode> dests = edges.get(c);
+        if (dests != null)
+            return dests;
+
+        return Collections.emptyList();
     }
 
-    public Label getLabel() {
-        return label;
-    }
-}
-
-class Label {
-    private char c;
-
-    static public Label newEpsilonLabel() {
-        return new Label('\0');
+    public Map<Character, List<NFANode>> getEdges() {
+        return edges;
     }
 
-    static public Label newCharLabel(char c) {
-        return new Label(c);
-    }
-
-    private Label(char c) {
-        this.c = c;
-    }
-
-    public boolean isEmpty() {
-        return c == '\0';
-    }
-
-    public boolean accepts(char c) {
-        return this.c == c;
-    }
-
-    public char getChar() {
-        return c;
+    public List<NFANode> getEpsilonEdgeDestinations() {
+        return this.epsilonEdgeDestinations;
     }
 }
