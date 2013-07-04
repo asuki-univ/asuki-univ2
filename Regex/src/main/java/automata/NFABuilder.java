@@ -36,7 +36,7 @@ public class NFABuilder {
 
     public NFA buildFromOption(RegexTermOption term) {
         NFA am = build(term.getTerm());
-        am.getBeginNode().addEdge(am.getEndNode(), Label.newEmptyLabel());
+        am.getBeginNode().addEdge(am.getEndNode(), Label.newEpsilonLabel());
         return am;
     }
 
@@ -49,10 +49,10 @@ public class NFABuilder {
 
         am1.getEndNode().setFinal(false);
         am2.getEndNode().setFinal(false);
-        beginNode.addEdge(am1.getBeginNode(), Label.newEmptyLabel());
-        beginNode.addEdge(am2.getBeginNode(), Label.newEmptyLabel());
-        am1.getEndNode().addEdge(endNode, Label.newEmptyLabel());
-        am2.getEndNode().addEdge(endNode, Label.newEmptyLabel());
+        beginNode.addEdge(am1.getBeginNode(), Label.newEpsilonLabel());
+        beginNode.addEdge(am2.getBeginNode(), Label.newEpsilonLabel());
+        am1.getEndNode().addEdge(endNode, Label.newEpsilonLabel());
+        am2.getEndNode().addEdge(endNode, Label.newEpsilonLabel());
 
         return new NFA(beginNode, endNode);
     }
@@ -62,15 +62,15 @@ public class NFABuilder {
         NFA am2 = build(term.getRightTerm());
 
         am1.getEndNode().setFinal(false);
-        am1.getEndNode().addEdge(am2.getBeginNode(), Label.newEmptyLabel());
+        am1.getEndNode().addEdge(am2.getBeginNode(), Label.newEpsilonLabel());
 
         return new NFA(am1.getBeginNode(), am2.getEndNode());
     }
 
     public NFA buildFromStar(RegexTermStar term) {
         NFA am = build(term.getTerm());
-        am.getBeginNode().addEdge(am.getEndNode(), Label.newEmptyLabel());
-        am.getEndNode().addEdge(am.getBeginNode(), Label.newEmptyLabel());
+        am.getBeginNode().addEdge(am.getEndNode(), Label.newEpsilonLabel());
+        am.getEndNode().addEdge(am.getBeginNode(), Label.newEpsilonLabel());
 
         return am;
     }

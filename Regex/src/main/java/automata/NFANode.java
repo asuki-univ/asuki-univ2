@@ -29,3 +29,49 @@ public class NFANode {
         return Collections.unmodifiableList(edges);
     }
 }
+
+class NFAEdge {
+    private NFANode dest;
+    private Label label;
+
+    public NFAEdge(NFANode dest, Label label) {
+        this.dest = dest;
+        this.label = label;
+    }
+
+    public NFANode getDestination() {
+        return dest;
+    }
+
+    public Label getLabel() {
+        return label;
+    }
+}
+
+class Label {
+    private char c;
+
+    static public Label newEpsilonLabel() {
+        return new Label('\0');
+    }
+
+    static public Label newCharLabel(char c) {
+        return new Label(c);
+    }
+
+    private Label(char c) {
+        this.c = c;
+    }
+
+    public boolean isEmpty() {
+        return c == '\0';
+    }
+
+    public boolean accepts(char c) {
+        return this.c == c;
+    }
+
+    public char getChar() {
+        return c;
+    }
+}
