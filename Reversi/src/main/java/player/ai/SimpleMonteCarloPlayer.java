@@ -54,7 +54,8 @@ public class SimpleMonteCarloPlayer extends Player {
         Game game = new Game();
         for (int count = 0; count < playoutCount; ++count) {
             Winner winner = game.play(blackPlayer, whitePlayer, nextBoard.clone(), turn.flip(), false);
-            if (turn == Turn.BLACK && winner == Winner.BLACK || turn == Turn.WHITE && winner == Winner.WHITE) {
+            if (turn == Turn.BLACK && winner == Winner.BLACK ||
+                    turn == Turn.WHITE && winner == Winner.WHITE) {
                 ++win;
             }
         }
