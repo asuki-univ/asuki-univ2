@@ -36,7 +36,7 @@ public class SimpleMonteCarloPlayer extends Player {
             }
         }
         long end = System.currentTimeMillis();
-        System.out.println("play duration: " + (end - start));
+        //System.out.println("play duration: " + (end - start));
         return maxPosition;
     }
 

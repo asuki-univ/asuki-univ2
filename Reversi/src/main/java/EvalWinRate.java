@@ -1,8 +1,13 @@
 import game.Game;
 import game.Game.Winner;
 import player.Player;
+import player.ai.PerfectPlayWrapperPlayer;
 import player.ai.RandomPlayer;
+import player.ai.SimpleMonteCarloPlayer;
+import player.ai.impl.AlphaBetaAdvancedAIPlayer;
 import player.ai.impl.AlphaBetaBoardScoreAIPlayer;
+import player.ai.impl.TranpositionAdvancedAIPlayer;
+import player.ai.simple.SimpleAIPlayer;
 import board.Board;
 import board.Turn;
 
@@ -10,19 +15,27 @@ public class EvalWinRate {
     private static final int GAME_COUNT = 100;
 
     public static void main(String[] args) {
-        Player blackPlayer = new RandomPlayer(Turn.BLACK);
-        //Player blackPlayer = new SimpleMonteCarloPlayer(Turn.BLACK, 100);
+        //Player blackPlayer = new RandomPlayer(Turn.BLACK);
+        Player blackPlayer = new SimpleMonteCarloPlayer(Turn.BLACK, 100);
         //Player blackPlayer = new UCB1MonteCarloPlayer(Turn.BLACK, 1000);
         //Player blackPlayer = new HumanPlayer(Turn.BLACK);
-        //Player blackPlayer = new SimpleAI(Turn.BLACK);
+        //Player blackPlayer = new SimpleAIPlayer(Turn.BLACK);
         //Player blackPlayer = new MinMaxSimpleAI(Turn.BLACK, 5);
-        //Player blackPlayer = new AlphaBetaSimpleAI(Turn.BLACK, 5);
-        //Player whitePlayer = new SimpleAI(Turn.WHITE);
+        //Player blackPlayer = new AlphaBetaBoardScoreAIPlayer(Turn.BLACK, 5);
+        //Player blackPlayer = new AlphaBetaAdvancedAIPlayer(Turn.BLACK, 5);
+        //Player blackPlayer = new PerfectPlayWrapperPlayer(new AlphaBetaBoardScoreAIPlayer(Turn.BLACK, 5), 15);
+        //Player blackPlayer = new PerfectPlayWrapperPlayer(new AlphaBetaAdvancedAIPlayer(Turn.BLACK, 5), 15);
+        //Player blackPlayer = new TranpositionAdvancedAIPlayer(Turn.BLACK, 3);
+        //Player blackPlayer = new AlphaBetaBoardScoreAIPlayer(Turn.BLACK, 3);
+
+        //Player whitePlayer = new PerfectPlayWrapperPlayer(new AlphaBetaBoardScoreAIPlayer(Turn.WHITE, 5), 15);
+        Player whitePlayer = new PerfectPlayWrapperPlayer(new AlphaBetaAdvancedAIPlayer(Turn.WHITE, 5), 15);
+        //Player whitePlayer = new SimpleAIPlayer(Turn.WHITE);
         //Player whitePlayer = new SimpleMonteCarloPlayer(Turn.WHITE, 100);
         //Player whitePlayer = new UCB1MonteCarloPlayer(Turn.WHITE, 1000);
         //Player whitePlayer = new MinMaxSimpleAI(Turn.WHITE, 5);
         //Player whitePlayer = new NegaMaxSimpleAI(Turn.WHITE, 5);
-        Player whitePlayer = new AlphaBetaBoardScoreAIPlayer(Turn.WHITE, 5);
+        //Player whitePlayer = new AlphaBetaBoardScoreAIPlayer(Turn.WHITE, 5);
         //Player whitePlayer = new AlphaBetaEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
         //Player whitePlayer = new NegaScoutEvaluationSimpleAI(Turn.WHITE, 5);
         //Player whitePlayer = new NegaScoutEvaluationSimpleWithCompleteReadingAI(Turn.WHITE, 5, 15);
