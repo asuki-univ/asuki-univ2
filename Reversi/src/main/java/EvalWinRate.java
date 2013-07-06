@@ -6,7 +6,6 @@ import player.ai.RandomPlayer;
 import player.ai.SimpleMonteCarloPlayer;
 import player.ai.impl.AlphaBetaAdvancedAIPlayer;
 import player.ai.impl.AlphaBetaBoardScoreAIPlayer;
-import player.ai.impl.TranpositionAdvancedAIPlayer;
 import player.ai.simple.SimpleAIPlayer;
 import board.Board;
 import board.Turn;

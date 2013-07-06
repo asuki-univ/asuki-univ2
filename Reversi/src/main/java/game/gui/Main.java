@@ -21,7 +21,6 @@ import player.Player;
 import player.ai.impl.AlphaBetaAdvancedAIPlayer;
 import player.ai.impl.NegaMaxAdvancedAIPlayer;
 import player.ai.impl.NegaScoutAdvancedAIPlayer;
-import player.ai.impl.TranpositionAdvancedAIPlayer;
 import player.ai.simple.MinMaxSimpleAIPlayer;
 import player.ai.simple.NegaMaxSimpleAIPlayer;
 import player.ai.simple.SimpleAIPlayer;
@@ -209,8 +208,6 @@ public class Main {
             return new AlphaBetaAdvancedAIPlayer(turn, 5);
         if ("NegaScout".equals(playerName))
             return new NegaScoutAdvancedAIPlayer(turn, 5);
-        if ("Tranposition".equals(playerName))
-            return new TranpositionAdvancedAIPlayer(turn, 5);
 
         assert(false);
         throw new RuntimeException("Unknown Player");
