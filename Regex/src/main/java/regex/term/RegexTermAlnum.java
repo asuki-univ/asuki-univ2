@@ -1,10 +1,10 @@
 package regex.term;
 
 
-public class RegexTermCharacter extends RegexTerm {
+public class RegexTermAlnum extends RegexTerm {
     private char c;
 
-    public RegexTermCharacter(char c) {
+    public RegexTermAlnum(char c) {
         this.c = c;
     }
 

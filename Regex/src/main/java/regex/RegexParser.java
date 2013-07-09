@@ -4,7 +4,7 @@ import regex.term.RegexTermOption;
 import regex.term.RegexTermSelection;
 import regex.term.RegexTermSequence;
 import regex.term.RegexTermStar;
-import regex.term.RegexTermCharacter;
+import regex.term.RegexTermAlnum;
 import regex.term.RegexTerm;
 
 public class RegexParser {
@@ -106,7 +106,7 @@ public class RegexParser {
             return node;
         } if (isAlnum(c)) {
             ++pos;
-            return new RegexTermCharacter(c);
+            return new RegexTermAlnum(c);
         } else {
             return null;
         }

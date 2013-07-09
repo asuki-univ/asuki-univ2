@@ -1,6 +1,6 @@
 package automata;
 
-import regex.term.RegexTermCharacter;
+import regex.term.RegexTermAlnum;
 import regex.term.RegexTerm;
 import regex.term.RegexTermOption;
 import regex.term.RegexTermSelection;
@@ -11,7 +11,7 @@ public class NFABuilder {
     public NFA build(RegexTerm term) {
         switch (term.getType()) {
         case CHAR:
-            return buildFromChar((RegexTermCharacter) term);
+            return buildFromChar((RegexTermAlnum) term);
         case OPTION:
             return buildFromOption((RegexTermOption) term);
         case SELECTION:
@@ -26,7 +26,7 @@ public class NFABuilder {
         throw new RuntimeException("Unknown RegexTerm");
     }
 
-    private NFA buildFromChar(RegexTermCharacter term) {
+    private NFA buildFromChar(RegexTermAlnum term) {
         NFANode beginNode = new NFANode(false);
         NFANode endNode = new NFANode(true);
         beginNode.addEdge(term.getChar(), endNode);
