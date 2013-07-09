@@ -10,7 +10,7 @@ import regex.term.RegexTermStar;
 public class NFABuilder {
     public NFA build(RegexTerm term) {
         switch (term.getType()) {
-        case CHAR:
+        case ALNUM:
             return buildFromChar((RegexTermAlnum) term);
         case OPTION:
             return buildFromOption((RegexTermOption) term);

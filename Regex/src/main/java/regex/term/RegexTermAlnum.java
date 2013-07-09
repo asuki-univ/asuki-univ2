@@ -10,7 +10,7 @@ public class RegexTermAlnum extends RegexTerm {
 
     @Override
     public TermType getType() {
-        return TermType.CHAR;
+        return TermType.ALNUM;
     }
 
     public char getChar() {
